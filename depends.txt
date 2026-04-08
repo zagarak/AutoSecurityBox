@@ -13,3 +13,11 @@ sys
 ujson
 machine
 utime.sleep
+
+# FS TREE
+
+/
+/lib
+  ./mfrcc522.py
+  ./fileRW.py
+./config.json
