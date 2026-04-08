@@ -4,6 +4,8 @@ import os
 import gc
 import ujson
 
+# fileRW Version 1.0.7
+
 ## Basic File Manipulation.
 # Create a new file.
 def touchFile(fName, content):
