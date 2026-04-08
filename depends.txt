@@ -1,0 +1,15 @@
+# DEPENDENCIES
+
+External Modules:
+
+lib/mfrc522.py
+lib/fileRW.py
+
+Micropython Built-In:
+
+os
+gc
+sys
+ujson
+machine
+utime.sleep
