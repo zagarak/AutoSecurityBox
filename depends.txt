@@ -21,3 +21,4 @@ utime.sleep
   ./mfrcc522.py
   ./fileRW.py
 ./config.json
+./main.py
