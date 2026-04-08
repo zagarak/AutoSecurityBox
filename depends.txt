@@ -1,5 +1,9 @@
 # DEPENDENCIES
 
+Firmware:
+
+Micropython v1.23.0 UF2 for Pico 2020
+
 External Modules:
 
 lib/mfrc522.py
