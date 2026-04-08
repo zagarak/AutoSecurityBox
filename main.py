@@ -88,8 +88,6 @@ def setupConfig():
         print("[MEM] Generating default config...")
         # JSON format is fname, cardA, cardB, mode0, disarmed-ul-timeout, armed-ul-timeout, reader-sleep.
         # Default setup values. Adjust in config.json after generation.
-        # Generated default config mode set to standby-mode in v 1.4.1-testing.
-        # This was done so that on first run, system can be used until a card is setup in config.
         fileRW.setupJSON("config.json", 12345678, 87654321, 98765432, 1010, 11, 7, 1.2)
     else:
         print("[MEM] An error occured while setting up config.")
@@ -133,7 +131,7 @@ def initReader():
         print("[ASB] Reader initialised succesfully.")
         print("")
         (stat, tag_type) = reader.request(reader.REQIDL)
-        sleep(float(rSleep)) # Reader polling timeout now editable in config.json.
+        sleep(float(rSleep))
         if stat == reader.OK:
             print("[RDR] Card detected! Attempting read, please wait...")
             (stat, uid) = reader.SelectTagSN()
@@ -176,9 +174,8 @@ def initReader():
                         print("[AUTH] Attempt (" + str(wctally) + "/" + str(wctallyMax) + ")")
                         blinkLight(2) # Give two flashes for wrong-card-presented warning.
                         secLight.value(1) # Turn security light back on after warning flashes.
-                        # Check wctally and break if exceeding attempt limit.
                         if wctally >= wctallyMax:
-                            errLvl = 44 # Set exit to wrong card term point.
+                            errLvl = 44
                             print("[AUTH] Maximum attempt limit reached! System will PANIC!")
                             # Set panic mode in config and reset board.
                             fileRW.amendJSON("config.json", "md0", 4003)
@@ -269,7 +266,7 @@ finally:
         blinkLight(4)
         sleep(0.4)
         blinkLight(4)
-    elif errLvl == 22: # 62 Reader cycle limit reached termination point.
+    elif errLvl == 22: # Reader cycle limit reached termination point.
         print("[ASB] Program halted on 'cycle-limit-reached'. Cycle request timeout.")
         secLight.value(0) # Reset security light to ensure exit code is readable.
         sleep(0.4)
@@ -283,7 +280,7 @@ finally:
         blinkLight(5)
         sleep(0.4)
         blinkLight(5)
-    elif errLvl == 33:# Standby-mode active termination point.
+    elif errLvl == 33: # Standby-mode active termination point.
         print("[ASB] Program halted on 'standby-mode-active'.")
         secLight.value(0) # Reset security light to ensure exit code is readable.
         sleep(0.4)
@@ -301,6 +298,5 @@ finally:
     print("[ASB] Exited with code: " + str(errLvl))
     sleep(0.1)
     # Exit program.
-    # Use sys module to exit cleanly and prevent restart before power is lost.
     sys.exit()
 ## EOF
