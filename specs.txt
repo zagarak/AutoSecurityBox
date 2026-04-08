@@ -6,5 +6,5 @@ Microcontroller: Raspberry Pi Pico 2020
 RFID Reader: MFRC522 (RFID-RC522)
 Relay Board: Single 3V3 SONGLE, Opti-Flyback
 Status LED: 5mm 3V 30mA White LED w/ 2Kohm Resistor
-Power: LM2596 Buck Converter (12v-5v)
+Power: LM2596 Buck Converter (12v-5v) + Momentary Switch + Diode
 Firmware: Micropython v1.23.0
