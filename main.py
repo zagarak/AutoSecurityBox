@@ -4,10 +4,10 @@
 import os
 import sys
 import fileRW # Depends on fileRW Version 1.0.7.
-import machine # Necessary for handling board reset.
+import machine
 from utime import sleep
 from machine import Pin, PWM
-from mfrc533 import MFRC522 # Known-good RC522 library, name change arbitrary.
+from mfrc522 import MFRC522
 
 ## Version Handling.
 # Version channel, number, and codename variables.
