@@ -7,16 +7,13 @@ import fileRW # Depends on fileRW Version 1.0.7.
 import machine
 from utime import sleep
 from machine import Pin, PWM
-from mfrc522 import MFRC522
+from mfrc522 import MFRC522 # Wendlers Micropython MFRC522 library.
 
 ## Version Handling.
-# Version channel, number, and codename variables.
-vchan = "stable"
-vmajor = 1 # Incriment when major changes are made to code or vminor + 1 > 9.
+vmajor = 1 # Incriment when major changes are made to functionality or vminor + 1 > 9.
 vminor = 4 # Incriment when significant changes are made to functionality or vpatch + 1 > 9.
-vpatch = 1 # Incriment when minor changes are made to syntax or readability.
-vernum = "v" + str(vmajor) + "." + str(vminor) + "." + str(vpatch) + "-" + str(vchan)
-codenam = "s3c0ndf4ct0r"
+vpatch = 2 # Incriment when minor changes are made to functionality or syntax.
+vernum = "v" + str(vmajor) + "." + str(vminor) + "." + str(vpatch)
 
 ## Pin declarations.
 relay0 = Pin(15, Pin.OUT) # Declare starter activation relay.
@@ -31,7 +28,7 @@ def unlockStarter(sHold): # Unlock starter for the specified amount of time.
     relay0.value(1)
     print("[AUTH] Unlocked for " + str(float(sHold) * 1000) + "ms...")
     secLight.value(0) # Turn security light off while starter is unlocked.
-    sleep(float(sHold)) # Sleep for sHold seconds as float.
+    sleep(float(sHold))
     relay0.value(0)
     print("[AUTH] Locked! Security light will illuminate briefly")
     print("[AUTH] before exit-code flashes are displayed.")
@@ -52,14 +49,13 @@ def prInfo():
     print("")
     print("[INFO] Firmware: Micropython")
     print("[INFO] Software: AutoSecurityBox-" + str(vernum))
-    print("[INFO] Codename: " + str(codenam))
     print("[INFO] Author: Zagarak")
     print("")
 
 # Status light function.
 def blinkLight(blinks): # Blinks security light to indicate exit or status code.
     for i in range(blinks): # Number of blinks as int.
-        secLight.value(1) # Blink pattern is on, off.
+        secLight.value(1) # Blink pattern is on, off, on, off.
         sleep(0.3)
         secLight.value(0)
         sleep(0.3)
@@ -74,7 +70,7 @@ def setupConfig():
     global accessCardB
     global accessCardC
     # Check that config.json exists.
-    fExists = fileRW.readFile("config.json", True) # Tuple bool is lookup(if_exists).
+    fExists = fileRW.readFile("config.json", True) # Tuple is str(fname), bool(lookup).
     if fExists == True: # If exists, report exists and populate variables.
         cMode = fileRW.readJSON("config.json", "md0")
         rSleep = fileRW.readJSON("config.json", "rs0")
@@ -84,7 +80,7 @@ def setupConfig():
         accessCardB = fileRW.readJSON("config.json", "ac1")
         accessCardC = fileRW.readJSON("config.json", "ac2")
         print("[MEM] Loaded config.")
-    elif fExists == False: # If not exists, create and set to default: authMode(value).
+    elif fExists == False: # If not exists, create. 
         print("[MEM] Generating default config...")
         # JSON format is fname, cardA, cardB, mode0, disarmed-ul-timeout, armed-ul-timeout, reader-sleep.
         # Default setup values. Adjust in config.json after generation.
@@ -95,11 +91,9 @@ def setupConfig():
 # Initialize reader function.
 def initReader():
     ptick = 0
-    # Declare global variables card, errlvl, ptickMax.
     global card
     global errLvl
     global ptickMax
-    # Error level, attempt, and wrong card tally variables as int.
     wctallyMax = 3
     wctally = 0
     errLvl = 0
@@ -114,7 +108,7 @@ def initReader():
         print("")
         unlockStarter(sHangB) # Initiate standby-mode unlock before reader initializes.
     elif cMode == 3040: # Auth-mode cycle limit set.
-        ptickMax = 24 # Reader detection cycle limit in (seconds x reader_sleep(x)) as int.
+        ptickMax = 24 # Reader detection cycle limit in seconds x rSleep as int.
         print("[MODE] Auth-mode active, system armed. ")
         print("")
         print("[MODE] Reader will initialize and you will have ~28s to scan a registered")
@@ -123,15 +117,15 @@ def initReader():
         print("[MODE] then system will exit.")
         print("")
     while True:
-        if cMode == 4003: # Panic-mode check (inside while loop to leverage break).
+        if cMode == 4003: # If in panic-mode, break before reader.init().
             print("[MODE] System panicked.")
-            errlvl = 44 # Set exit code to wrong card and skip reader.init().
+            errLvl = 44
             break
         reader.init()
         print("[ASB] Reader initialised succesfully.")
         print("")
         (stat, tag_type) = reader.request(reader.REQIDL)
-        sleep(float(rSleep))
+        sleep(float(rSleep)) # Adjust polling timeout as 'rs0' in config.json.
         if stat == reader.OK:
             print("[RDR] Card detected! Attempting read, please wait...")
             (stat, uid) = reader.SelectTagSN()
@@ -174,8 +168,9 @@ def initReader():
                         print("[AUTH] Attempt (" + str(wctally) + "/" + str(wctallyMax) + ")")
                         blinkLight(2) # Give two flashes for wrong-card-presented warning.
                         secLight.value(1) # Turn security light back on after warning flashes.
+                        # Check wctally and break if exceeding attempt limit.
                         if wctally >= wctallyMax:
-                            errLvl = 44
+                            errLvl = 44 # Set exit to wrong card term point.
                             print("[AUTH] Maximum attempt limit reached! System will PANIC!")
                             # Set panic mode in config and reset board.
                             fileRW.amendJSON("config.json", "md0", 4003)
@@ -187,26 +182,27 @@ def initReader():
                         else: # Reset cycle count to allow for another attempt.
                             ptick = 0
                             sleep(0.1)
-                elif cMode == 1010: # If in standby-mode, change mode and break
+                elif cMode == 1010: # If in standby-mode, change mode and break.
+                    # Do not call unlockStarter() here.
                     if card == accessCardA:
                         print("[AUTH] Card Detected! | System switched to auth-mode.")
                         fileRW.amendJSON("config.json", "md0", 3040)
-                        errLvl = 21
+                        errLvl = 31
                         break
                     elif card == accessCardB:
                         print("[AUTH] Card Detected! | System switched to auth-mode.")
                         fileRW.amendJSON("config.json", "md0", 3040)
-                        errLvl = 21
+                        errLvl = 31
                         break
                     elif card == accessCardC:
                         print("[AUTH] Card Detected! | System switched to auth-mode.")
                         fileRW.amendJSON("config.json", "md0", 3040)
-                        errLvl = 21
+                        errLvl = 31
                         break
-                    else: # If non-registered card is presented, warn prompt.
-                        print("[AUTH] Invalid Card! | Presented card is not registered as a service card.")
+                    else: # If unregistered card is presented, warn prompt.
+                        print("[AUTH] Invalid Card! | Presented card is unregistered.")
             else: # Card unreadable or absent while resolving uid.
-                print("[RDR] Error reading card. Please hold it close to the reader and keep it still...")
+                print("[RDR] Read Error! | Presented card is unreadable or was removed before read completed.")
         else: # No card detected or no reader state change.
             if ptick < ptickMax:
                 print("[RDR] No card detected! Place a card in front of the reader to begin. (Cycle: " + str(ptick) + "/" + str(ptickMax) + ")")
@@ -222,13 +218,14 @@ def initReader():
     else: # True ≠ True in while?
         print("[CRIT] Error! Reader initialization failed.")
         print("")
-        errLvl = 93 # Set errlvl to exit on exception-unknown.
+        errLvl = 93 # Set errLvl to exit on exception-unknown.
 
 ## Setup.
 # Setup config file with default settings or get existing config.
 setupConfig()
 # Print hardware and software info to debug console.
 prInfo()
+#print("ASB-" + str(vernum)) # This line is to replace prInfo in lite-stealth releases (remove prInfo func).
 # Get and print the board's current memory info.
 hRam = fileRW.getRAM()
 fBlocks = fileRW.getNOR()
@@ -247,42 +244,42 @@ try:
     sleep(0.2)
 # Try-fail general exception catch.
 except:
-    # Do not set or incriment errlvl value here.
+    # Do not set or incriment errLvl value here.
     print("[CRIT] An exception or KeyboardInterrupt has occured!")
 # Check error level, cleanup, and exit.
 finally: 
-    if errLvl == 21: # Authmode-access-granted termination point.
-        print("[ASB] Program halted on 'auth-mode-active'.")
+    if errLvl == 31: # Authmode-access-granted termination point.
+        print("[ASB] Program halted on 'auth-mode-activated'.")
         # Output exit code over security light.
         secLight.value(0) # Reset security light to ensure exit code is readable.
         sleep(0.4)
-        blinkLight(2)
+        blinkLight(3)
         sleep(0.4)
         blinkLight(1)
     elif errLvl == 44: # Wrong card read attempt limit termination point.
         print("[ASB] Program halted on 'system-panic'. Attempt limit reached, system locked out.")
-        secLight.value(0) # Reset security light to ensure exit code is readable.
+        secLight.value(0)
         sleep(0.4)
         blinkLight(4)
         sleep(0.4)
         blinkLight(4)
     elif errLvl == 22: # Reader cycle limit reached termination point.
         print("[ASB] Program halted on 'cycle-limit-reached'. Cycle request timeout.")
-        secLight.value(0) # Reset security light to ensure exit code is readable.
+        secLight.value(0)
         sleep(0.4)
         blinkLight(2)
         sleep(0.4)
         blinkLight(2)
     elif errLvl == 55: # Reader cycle count unparsable termination point.
         print("[WARN] Program halted on 'reader-bad-value'. Cycle count unparsable.")
-        secLight.value(0) # Reset security light to ensure exit code is readable.
+        secLight.value(0)
         sleep(0.4)
         blinkLight(5)
         sleep(0.4)
         blinkLight(5)
     elif errLvl == 33: # Standby-mode active termination point.
-        print("[ASB] Program halted on 'standby-mode-active'.")
-        secLight.value(0) # Reset security light to ensure exit code is readable.
+        print("[ASB] Program halted on 'standby-mode-activated'.")
+        secLight.value(0)
         sleep(0.4)
         blinkLight(3)
         sleep(0.4)
@@ -290,7 +287,7 @@ finally:
     else: # Unknown exception (catch-all) termination point.
         errLvl = 93 # Display error level 93 for all unknown exceptions.
         print("[CRIT] Program halted on 'exception-unknown'.")
-        secLight.value(0) # Reset security light to ensure exit code is readable.
+        secLight.value(0)
         sleep(0.4)
         blinkLight(9)
         sleep(0.4)
@@ -298,5 +295,6 @@ finally:
     print("[ASB] Exited with code: " + str(errLvl))
     sleep(0.1)
     # Exit program.
+    # Use sys module to exit cleanly and prevent restart before power is lost.
     sys.exit()
 ## EOF
