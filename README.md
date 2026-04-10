@@ -1,5 +1,6 @@
 # AutoSecurityBox
 Tested on: Micropython v1.23.0 | Raspberry Pi Pico 2020
+This project depends on [micropython-mfrc522](https://github.com/wendlers/micropython-mfrc522/blob/master/README.md).
 
 
 ## About
