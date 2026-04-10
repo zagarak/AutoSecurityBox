@@ -1,11 +1,13 @@
-# This is an example configuration for reference only.
-# Allow main.py to generate its own config.json on first run.
-
-# ac0 - card0 UID as int.
-# ac1 - card1 UID as int.
-# sc0 - card3 UID as int.
-# md0 - mode (auth-mode, standby-mode, panic-mode) as int.
-# ht0 - starter-circuit-closed-hangtime as int.
-# rs0 - reader-polling-cycle-sleep as float.
+{
+  "_COMMENTS":"Comments"
+  "_C0":"This is an example configuration for reference only.",
+  "_C1":"Allow main.py to generate its own config.json on first run.",
+  "_C2":"ac0 - card0 UID as int.",
+  "_C3":"ac1 - card1 UID as int.",
+  "_C4":"sc0 - card3 UID as int.",
+  "_C5":"md0 - mode (auth-mode, standby-mode, panic-mode) as int.",
+  "_C6":"ht0 - starter-circuit-closed-hangtime as int.",
+  "":"rs0 - reader-polling-cycle-sleep as float."
+}
 
 {"ac1": 12345678, "ac0": 123456789, "sc0": 876543210, "md0": 3040, "ht0": 11, "rs0": 1.2}
