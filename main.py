@@ -106,6 +106,7 @@ def initReader():
         print("[MODE] you may scan a registered card within ~3s to switch the system to auth-mode.")
         print("[MODE] ")
         print("")
+        sleep(0.2) # Security light flash delay before unlock.
         unlockStarter(sHangB) # Initiate standby-mode unlock before reader initializes.
     elif cMode == 3040: # Auth-mode cycle limit set.
         ptickMax = 24 # Reader detection cycle limit in seconds x rSleep as int.
