@@ -10,4 +10,4 @@
   "":"rs0 - reader-polling-cycle-sleep as float."
 }
 
-{"ac1": 12345678, "ac0": 123456789, "sc0": 876543210, "md0": 3040, "ht0": 11, "rs0": 1.2}
+{"c0": 12345678, "c1": 123456789, "c2": 876543210, "m0": 3040, "arm_sleep": 11, "disarm_sleep": 7, "reader_sleep": 1.2}
