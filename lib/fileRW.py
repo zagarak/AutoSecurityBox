@@ -4,7 +4,7 @@ import os
 import gc
 import ujson
 
-# fileRW Version 1.0.7
+# fileRW Version 1.0.8
 
 ## Basic File Manipulation.
 # Create a new file.
@@ -77,13 +77,13 @@ def readFile(fName, lookup):
 def setupJSON(fname, cardA, cardB, cardC, modeA, dUlSleep, aUlSleep, rsleep):
     try:
         data = {
-            "ac0": cardA,
-            "ac1": cardB,
-            "ac2": cardC,
-            "md0": modeA,
-            "cs0": dUlSleep,
-            "cs1": aUlSleep,
-            "rs0": rsleep,
+            "c0": cardA,
+            "c1": cardB,
+            "c2": cardC,
+            "m0": modeA,
+            "disarm_sleep": dUlSleep,
+            "arm_sleep": aUlSleep,
+            "reader_sleep": rsleep,
         }
         with open(str(fname), "w") as file:
             file.write(ujson.dumps(data))
