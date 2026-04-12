@@ -3,7 +3,7 @@
 ## Libraries and modules.
 import os
 import sys
-import fileRW # Depends on fileRW Version 1.0.7.
+import fileRW # Depends on fileRW Version 1.0.8.
 import machine
 from utime import sleep
 from machine import Pin, PWM
@@ -12,7 +12,7 @@ from mfrc522 import MFRC522 # Wendlers Micropython MFRC522 library.
 ## Version Handling.
 vmajor = 1 # Incriment when major changes are made to functionality or vminor + 1 > 9.
 vminor = 4 # Incriment when significant changes are made to functionality or vpatch + 1 > 9.
-vpatch = 2 # Incriment when minor changes are made to functionality or syntax.
+vpatch = 3 # Incriment when minor changes are made to functionality or syntax.
 vernum = "v" + str(vmajor) + "." + str(vminor) + "." + str(vpatch)
 
 ## Pin declarations.
@@ -72,13 +72,13 @@ def setupConfig():
     # Check that config.json exists.
     fExists = fileRW.readFile("config.json", True) # Tuple is str(fname), bool(lookup).
     if fExists == True: # If exists, report exists and populate variables.
-        cMode = fileRW.readJSON("config.json", "md0")
-        rSleep = fileRW.readJSON("config.json", "rs0")
-        sHangA = fileRW.readJSON("config.json", "cs0")
-        sHangB = fileRW.readJSON("config.json", "cs1")
-        accessCardA = fileRW.readJSON("config.json", "ac0")
-        accessCardB = fileRW.readJSON("config.json", "ac1")
-        accessCardC = fileRW.readJSON("config.json", "ac2")
+        cMode = fileRW.readJSON("config.json", "m0")
+        rSleep = fileRW.readJSON("config.json", "reader_sleep")
+        sHangA = fileRW.readJSON("config.json", "arm_sleep")
+        sHangB = fileRW.readJSON("config.json", "disarm_sleep")
+        accessCardA = fileRW.readJSON("config.json", "c0")
+        accessCardB = fileRW.readJSON("config.json", "c1")
+        accessCardC = fileRW.readJSON("config.json", "c2")
         print("[MEM] Loaded config.")
     elif fExists == False: # If not exists, create. 
         print("[MEM] Generating default config...")
