@@ -146,21 +146,21 @@ def initReader():
                         print("[AUTH] Access Granted! | Presented card matches a valid record.")
                         print("")
                         unlockStarter(sHangA)
-                        fileRW.amendJSON("config.json", "md0", 1010)
+                        fileRW.amendJSON("config.json", "m0", 1010)
                         errLvl = 33
                         break
                     elif card == accessCardB:
                         print("[AUTH] Access Granted! | Presented card matches a valid record.")
                         print("")
                         unlockStarter(sHangA)
-                        fileRW.amendJSON("config.json", "md0", 1010)
+                        fileRW.amendJSON("config.json", "m0", 1010)
                         errLvl = 33
                         break
                     elif card == accessCardC:
                         print("[AUTH] Access Granted! | Presented card matches a valid record.")
                         print("")
                         unlockStarter(sHangA)
-                        fileRW.amendJSON("config.json", "md0", 1010)
+                        fileRW.amendJSON("config.json", "m0", 1010)
                         errLvl = 33
                         break
                     else:
@@ -174,7 +174,7 @@ def initReader():
                             errLvl = 44 # Set exit to wrong card term point.
                             print("[AUTH] Maximum attempt limit reached! System will PANIC!")
                             # Set panic mode in config and reset board.
-                            fileRW.amendJSON("config.json", "md0", 4003)
+                            fileRW.amendJSON("config.json", "m0", 4003)
                             print("[BOARD] Board will reset. Power cycle required to continue.")
                             sleep(3)
                             machine.reset()
@@ -187,17 +187,17 @@ def initReader():
                     # Do not call unlockStarter() here.
                     if card == accessCardA:
                         print("[AUTH] Card Detected! | System switched to auth-mode.")
-                        fileRW.amendJSON("config.json", "md0", 3040)
+                        fileRW.amendJSON("config.json", "m0", 3040)
                         errLvl = 31
                         break
                     elif card == accessCardB:
                         print("[AUTH] Card Detected! | System switched to auth-mode.")
-                        fileRW.amendJSON("config.json", "md0", 3040)
+                        fileRW.amendJSON("config.json", "m0", 3040)
                         errLvl = 31
                         break
                     elif card == accessCardC:
                         print("[AUTH] Card Detected! | System switched to auth-mode.")
-                        fileRW.amendJSON("config.json", "md0", 3040)
+                        fileRW.amendJSON("config.json", "m0", 3040)
                         errLvl = 31
                         break
                     else: # If unregistered card is presented, warn prompt.
