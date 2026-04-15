@@ -2,7 +2,7 @@
 Tested on: Micropython v1.23.0 | Raspberry Pi Pico 2020
 
 ## Setup
-To get started, follow ``schema.png`` to wire board and modules. You may also refer to [this](https://github.com/wendlers/micropython-mfrc522/blob/master/README.md) for detailed reader setup instructions.
+To get started, follow ``schema.png`` to wire board and modules. You may also refer to [this page](https://github.com/wendlers/micropython-mfrc522/blob/master/README.md) for detailed reader setup instructions.
 
 After the board and modules are assembled, choose an enclosure and mounting location. I chose to mount mine inside the steering column, positioning the reader in a manner so that cards could be read through the plastic column. Then place ``main.py`` in the ``/`` directory of the board using a USB cable and your choice of IDE. See [dependencies](#dependencies). Run a test of ``main.py`` and it will generate ``config.json``. After it exits edit the configuration file to include your card UIDs modify the starter hang-time or reader polling timeout to tune them to your needs.
 
