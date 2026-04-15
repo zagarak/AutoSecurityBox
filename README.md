@@ -33,4 +33,5 @@ If no card is scanned, it will exit on "reader-timeout".
 
 For added security: If three read attempts are made with an invalid card, it overwrites the data key ``m0`` with the value ``4003`` and then resets the board. This puts the program into a tertiary mode that will refuse to initialize the reader or actuate the starter relay; Instead exiting on "system-panic" until ``m0`` is updated to either ``3040`` or ``1010``.
 
-Note: Card UIDs are not encrypted or obscured in any way. The goal of this project is not government quality security. Instead, the hope is to increase the difficulty, time, and technical requirements for a potential thief to get away with the vehicle. In the future I plan to also control the fuel pump or ignition system. Though, this would require the board and relays to remain powered during operation of the vehicle.
+## Additional Notes
+Card UIDs are not encrypted or obscured in any way. The goal of this project is not government quality security. Instead, the hope is to increase the difficulty, time, and technical requirements for a potential thief to get away with the vehicle. In the future I plan to also control the fuel pump or ignition system. Though, this would require the board and relays to remain powered during operation of the vehicle.
