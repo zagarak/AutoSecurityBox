@@ -35,3 +35,5 @@ For added security: If three read attempts are made with an invalid card, it ove
 
 ## Additional Notes
 Card UIDs are not encrypted or obscured in any way. The goal of this project is not government quality security. Instead, the hope is to increase the difficulty, time, and technical requirements for a potential thief to get away with the vehicle. In the future I plan to also control the fuel pump or ignition system. Though, this would require the board and relays to remain powered during operation of the vehicle.
+
+This project could be adapted for easily configurable electronic-lock doors and access panels.
