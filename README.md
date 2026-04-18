@@ -21,8 +21,8 @@ After flashing firmware, place ``mfrc522.py`` and ``fileRW.py`` in the ``/lib`` 
 
 ## Features & Operating Objective
 The goal of this project is to provide security for parked vehicles that lack native anti-theft systems. AutoSecurityBox implements a dual-mode approach to provide security when it is necessary and maintain simplicity and reliability when it is not, especially during active operation of the vehicle and while recovering from stalls.
-- Standby/Disamred Mode
-- Auth/Armed Mode
+- Standby Mode/Disarmed
+- Auth Mode/Armed
  
 ### Operating objective
 By default ``config.json`` is generated with the mode (data key m0) set to standby (int 1010). When ``main.py`` runs it checks this data key and if in standby mode, it closes the starter relay for a duration in seconds equal to the value of the data key ``disarm_sleep``. Then it opens the relay and initializes the reader for a duration of ``reader_sleep`` x ``ptickMax`` seconds to allow the user to arm the system. Finally it exits, and if a valid card was scanned, overwrites data key ``m0`` with the value ``3040``.
