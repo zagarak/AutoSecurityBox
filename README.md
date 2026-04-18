@@ -1,5 +1,5 @@
 # AutoSecurityBox
-Tested on: Micropython v1.23.0 | Raspberry Pi Pico 2020
+Tested on: Micropython v1.23.0 | Raspberry Pi Pico 2020<br />
 This repository does not provide releases. You may clone it and use it directly or fork the project.
 
 ## About
