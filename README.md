@@ -38,4 +38,4 @@ Card UIDs are not encrypted or obscured in any way. The goal of this project is 
 
 You may notice a diode on ``5v+_Vsys`` in ``schema.png``. During the first few tests on vehicle power I noticed the power LED was no longer illuminating on the buck converter. Alternator voltage fluctuates slightly and is higher than nominal battery voltage. However, I tested the output voltage stability of the converter before connecting the microcontroller and I wasn't satisfied that was the issue. The relay module is opti-coupled and has a flyback diode but just to be sure I added another diode between the supply and the microcontroller to isolate the converter output and this resolved the issue. My prototype system has been deployed for six months now with no upsets or sporadic behavior observed. 
 
-***This project could be adapted for easily configurable electronic-lock doors and access panels.**
+***This project could easily be adapted for electronic door lock cylinders and servo-actuated access panel latches.**
