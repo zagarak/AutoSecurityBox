@@ -13,7 +13,7 @@ from mfrc522 import MFRC522 # Wendlers Micropython MFRC522 library.
 # Version number and codename.
 vmajor = 1 # Incriment when major changes are made to code or vminor + 1 > 9.
 vminor = 5 # Incriment when significant changes are made to functionality or vpatch + 1 > 9.
-vpatch = 0 # Incriment when minor changes are made to syntax or readability.
+vpatch = 1 # Incriment when minor changes are made to syntax or readability.
 vernum = "v" + str(vmajor) + "." + str(vminor) + "." + str(vpatch)
 codenam = "s3c0ndf4ct0r"
 
@@ -98,6 +98,7 @@ def unlockStarter(sHold): # Unlock starter for the specified amount of time.
 # Initialize Reader Function.
 def initReader(cycles):
     global card
+    tick = 0
     card = 0
     for i in range(cycles):
         reader.init()
@@ -105,6 +106,7 @@ def initReader(cycles):
         print("")
         (stat, tag_type) = reader.request(reader.REQIDL)
         sleep(float(rSleep))
+        tick += 1
         if stat == reader.OK:
             print("[RDR] Card detected! Attempting read, please wait...")
             (stat, uid) = reader.SelectTagSN()
@@ -123,15 +125,16 @@ def initReader(cycles):
             else: # Card unreadable or absent while resolving uid.
                 print("[RDR] Read Error! | Presented card is unreadable or was removed before read completed.")
         else: # No card detected or no reader state change. ptick goes here.
-            print("[RDR] No card detected during poll.")
+            print("[RDR] No card detected during this cycle. | Cycle: (" + str(tick) + "/" + str(cycleLimit) + ")")
             
 # Handle Authorization Function.
 def authBouncer():
     #global card
     global errLvl
+    global cycleLimit
     errLvl = 0 # Starting error level.
     if cMode == 1010: # Standby-mode call unlockStarter() and then set reader cycle limit.
-        ptickMax = 3 # Reduce reader cycle limit when in service mode.
+        cycleLimit = 3
         print("[MODE] Standby-mode active, system disarmed.")
         print("")
         print("[MODE] Relay will close for " + str(sHangB) + "s and then once reopened,")
@@ -141,7 +144,7 @@ def authBouncer():
         sleep(0.2) # Security light flash buffer sleep.
         unlockStarter(sHangB) # Initiate standby-mode unlock before reader initializes.
         # Then initialize reader briefly for mode change requests.
-        initReader(4) # Reader cycles as int.
+        initReader(cycleLimit) # Reader cycles as int.
         if card == accessCardA:
             print("[AUTH] Card Detected! | System switched to auth-mode.")
             fileRW.amendJSON("config.json", "m0", 3040)
@@ -164,7 +167,7 @@ def authBouncer():
         print("[MODE] System panicked.")
         errLvl = 44
     elif cMode == 3040: # Auth-mode cycle limit set.
-        ptickMax = 24 # Reader detection cycle limit in seconds x rSleep as int.
+        cycleLimit = 12
         print("[MODE] Auth-mode active, system armed. ")
         print("")
         print("[MODE] Reader will initialize and you will have ~28s to scan a registered")
@@ -172,7 +175,7 @@ def authBouncer():
         print("[MODE] and then once reopened, mode will be set to auth-mode in config and")
         print("[MODE] then system will exit.")
         print("")
-        initReader(20) # Reader cycles as int.
+        initReader(cycleLimit) # Reader cycles as int.
         if card == accessCardA:
             print("[AUTH] Access Granted! | Presented card matches a valid record.")
             print("")
