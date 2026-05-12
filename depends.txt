@@ -20,7 +20,7 @@ Recommended Filesystem Tree:
 
 /
 /lib
-  ./mfrcc522.py
+  ./mfrc522.py
   ./fileRW.py
 ./config.json
 ./main.py
