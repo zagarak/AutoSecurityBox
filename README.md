@@ -7,6 +7,13 @@ AutoSecurityBox is a Micropython based security project geared towards enhancing
 
 To do this I used a Raspberry Pi Pico 2020 board, LM2596 Buck Converter, Momentary Power Switch, RC522 Card Reader, a single 3V3 relay module, and an LED to display exit codes to the driver. Wiring is pretty straight forward. Refer to schema.png for wiring instructions. (PIN numbers listed may not correspond to actual physical location)
 
+## Precautions, Safety, & Disclaimers
+- Do not wire in a way that prevents vehicle operation during emergencies.
+- Follow automotive electrical safety standards: fuse power lines, verify wiring before connection, and disconnect the battery before installation/testing.
+- This is not tamper-proof security; it increases the time and skill required to steal the car.
+- You are solely responsible for your safety and the functionality/warranty of your vehicle.
+
+
 ## Setup
 To get started, follow ``schema.png`` to wire board and modules. You may also refer to [this page](https://github.com/wendlers/micropython-mfrc522/blob/master/README.md) for detailed reader setup instructions.
 
