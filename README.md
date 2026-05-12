@@ -29,12 +29,14 @@ By default ``config.json`` is generated with the mode (data key m0) set to stand
 
 When ``main.py`` runs it checks this data key and if in auth/armed mode, initializes the reader for a duration equal to the value of the data key ``reader_sleep`` x ``ptickMax`` seconds. If a valid card is scanned during this time, the system will close the starter relay for ``arm_sleep`` seconds, disarm and exit on "system-disarmed" and on the next power cycle it will return to standby-mode operation.
 
-If no card is scanned, it will exit on "reader-timeout".
+If no card is scanned, it will exit on "routine-timeout".
 
 For added security: If three read attempts are made with an invalid card, it overwrites the data key ``m0`` with the value ``4003`` and then resets the board. This puts the program into a tertiary mode that will refuse to initialize the reader or actuate the starter relay; Instead exiting on "system-panic" until ``m0`` is updated to either ``3040`` or ``1010``.
 
 ## Additional Notes
 Card UIDs are not encrypted or obscured in any way. The goal of this project is not government quality security. Instead, the hope is to increase the difficulty, time, and technical requirements for a potential thief to get away with the vehicle. In the future I plan to also control the fuel pump or ignition system. Though, this would require the board and relays to remain powered during operation of the vehicle.
+
+Mode values are arbitrary and may be changed by the end user so long as each corresponding reference in ``main.py`` is also changed to match its partner. They exist solely to act as a magic number so that the Microcontroller can track state changes between power cycles without a backup battery.
 
 You may notice a diode on ``5v+_Vsys`` in ``schema.png``. During the first few tests on vehicle power I noticed the power LED was no longer illuminating on the buck converter. Alternator voltage fluctuates slightly and is higher than nominal battery voltage. However, I tested the output voltage stability of the converter before connecting the microcontroller and I wasn't satisfied that was the issue. The relay module is opti-coupled and has a flyback diode but just to be sure I added another diode between the supply and the microcontroller to isolate the converter output and this resolved the issue. My prototype system has been deployed for six months now with no upsets or sporadic behavior observed. 
 
