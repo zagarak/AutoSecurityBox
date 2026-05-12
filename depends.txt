@@ -1,21 +1,22 @@
 # DEPENDENCIES
 
 Firmware:
+
   Micropython v1.23.0 UF2 for Pico 2020
 
-External Modules:
-  lib/mfrc522.py
-  lib/fileRW.py
+Modules:
 
-Micropython Built-In:
-  os
-  gc
-  sys
-  ujson
-  machine
-  utime.sleep
+  lib/mfrc522.py   wendlers/micropython-mfrc
+  lib/fileRW.py    zagarak/AutoSecurityBox/lib
 
-# FS TREE
+  os               micropython
+  gc               micropython
+  sys              micropython
+  ujson            micropython
+  machine          micropython
+  utime.sleep      micropython
+
+Recommended Filesystem Tree:
 
 /
 /lib
