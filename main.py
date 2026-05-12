@@ -28,6 +28,7 @@ def blinkLight(blinks): # Blinks security light to indicate exit or status code.
     ledState = secLight.value() # Get current security light state.
     if ledState == 1: # If security light is on, turn it off to improve flash code readability.
         secLight.value(0)
+        sleep(0.4)
     for i in range(blinks): # Number of blinks as int.
         secLight.value(1)
         sleep(0.3)
@@ -230,33 +231,28 @@ finally:
     if errLvl == 31: # Auth-mode-activated termination point.
         print("[ASB] Program halted on 'auth-mode-activated'.")
         # Output exit code over security light.
-        sleep(0.4)
         blinkLight(3)
         sleep(0.4)
         blinkLight(1)
     elif errLvl == 33: # Standby-mode-activated termination point.
         print("[ASB] Program halted on 'standby-mode-activated'.")
-        sleep(0.4)
         blinkLight(3)
         sleep(0.4)
         blinkLight(3)
     elif errLvl == 44: # Panic-mode termination point.
         print("[ASB] Program halted on 'system-panic'. Attempt limit reached, system locked out.")
-        sleep(0.4)
         blinkLight(4)
         sleep(0.4)
         blinkLight(4)
     elif errLvl == 22: # Routine-timeout termination point.
         print("[ASB] Program halted on 'routine-timeout'. | Last recorded mode: " + str(cMode))
         print("No input detected during routine. No configuration changes were made.")
-        sleep(0.4)
         blinkLight(2)
         sleep(0.4)
         blinkLight(2)
     else: # Unknown exception (catch-all) termination point.
         errLvl = 93 # Display error level 93 for all unknown exceptions.
         print("[CRIT] Program halted on 'exception-unknown'.")
-        sleep(0.4)
         blinkLight(9)
         sleep(0.4)
         blinkLight(3)
