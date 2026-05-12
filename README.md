@@ -38,6 +38,6 @@ Card UIDs are not encrypted or obscured in any way. The goal of this project is 
 
 Mode values are arbitrary and may be changed by the end user so long as each corresponding reference in ``main.py`` is also changed to match its partner. They exist solely to act as a magic number so that the Microcontroller can track state changes between power cycles without a backup battery.
 
-You may notice a diode on ``5v+_Vsys`` in ``schema.png``. During the first few tests on vehicle power I noticed the power LED was no longer illuminating on the buck converter. Alternator voltage fluctuates slightly and is higher than nominal battery voltage. However, I tested the output voltage stability of the converter before connecting the microcontroller and I wasn't satisfied that was the issue. The relay module is opti-coupled and has a flyback diode but just to be sure I added another diode between the supply and the microcontroller to isolate the converter output and this resolved the issue. My prototype system has been deployed for several months now with no upsets or sporadic behavior observed. 
+You may notice a diode on ``5v+_Vsys`` in ``schema.png``. I added it between the supply and the microcontroller to isolate the converter output from the debug cable's ``5v+`` to prevent backfeeding of the buck converter during programming.
 
 ***This project could easily be adapted for electronic door lock cylinders and servo-actuated access panel latches.**
