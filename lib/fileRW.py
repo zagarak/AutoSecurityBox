@@ -74,7 +74,7 @@ def readFile(fName, lookup):
 
 # Initialize JSON conforming to machine setup requirements.
 # Check main.py and ensure new additions are included there.
-def setupJSON(fname, cardA, cardB, cardC, modeA, dUlSleep, aUlSleep, rsleep):
+def setupJSON(fname, cardA, cardB, cardC, modeA, dUlSleep, aUlSleep, rsleep, rtimeout):
     try:
         data = {
             "c0": cardA,
@@ -84,6 +84,7 @@ def setupJSON(fname, cardA, cardB, cardC, modeA, dUlSleep, aUlSleep, rsleep):
             "disarm_sleep": dUlSleep,
             "arm_sleep": aUlSleep,
             "reader_sleep": rsleep,
+            "reader_timeout": rtimeout,
         }
         with open(str(fname), "w") as file:
             file.write(ujson.dumps(data))
