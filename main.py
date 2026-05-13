@@ -3,7 +3,7 @@
 ## Libraries and modules.
 import os
 import sys
-import fileRW # Depends on fileRW Version 1.0.8.
+import fileRW # Depends on fileRW Version 1.0.9.
 import machine
 from utime import sleep
 from machine import Pin, PWM
@@ -13,7 +13,7 @@ from mfrc522 import MFRC522 # Wendlers Micropython MFRC522 library.
 # Version number and codename.
 vmajor = 1 # Incriment when major changes are made to code or vminor + 1 > 9.
 vminor = 5 # Incriment when significant changes are made to functionality or vpatch + 1 > 9.
-vpatch = 1 # Incriment when minor changes are made to syntax or readability.
+vpatch = 2 # Incriment when minor changes are made to syntax or readability.
 vernum = "v" + str(vmajor) + "." + str(vminor) + "." + str(vpatch)
 codenam = "s3c0ndf4ct0r"
 
@@ -58,6 +58,7 @@ def setupConfig():
     global rSleep
     global sHangA
     global sHangB
+    global rTimeout
     global accessCardA
     global accessCardB
     global accessCardC
@@ -68,15 +69,16 @@ def setupConfig():
         rSleep = fileRW.readJSON("config.json", "reader_sleep")
         sHangA = fileRW.readJSON("config.json", "arm_sleep")
         sHangB = fileRW.readJSON("config.json", "disarm_sleep")
+        rTimeout = fileRw.readJSON("config.json", "reader_timeout")
         accessCardA = fileRW.readJSON("config.json", "c0")
         accessCardB = fileRW.readJSON("config.json", "c1")
         accessCardC = fileRW.readJSON("config.json", "c2")
         print("[MEM] Loaded config.")
     elif fExists == False: # If not exists, create. 
         print("[MEM] Generating default config...")
-        # JSON format is fname, cardA, cardB, mode0, disarmed-ul-timeout, armed-ul-timeout, reader-sleep.
+        # JSON format is fname, cardA, cardB, mode0, disarmed-ul-timeout, armed-ul-timeout, reader-sleep, reader_timeout.
         # Default setup values. Adjust in config.json after generation.
-        fileRW.setupJSON("config.json", 12345678, 87654321, 98765432, 1010, 11, 7, 1.2)
+        fileRW.setupJSON("config.json", 12345678, 87654321, 98765432, 1010, 11, 7, 1.2, 12)
     else:
         print("[MEM] An error occured while setting up config.")
 
@@ -134,7 +136,7 @@ def authBouncer():
     global cycleLimit
     errLvl = 0 # Starting error level.
     if cMode == 1010: # Standby-mode call unlockStarter() and then set reader cycle limit.
-        cycleLimit = 3
+        cycleLimit = rTimeout / 4
         print("[MODE] Standby-mode active, system disarmed.")
         print("")
         print("[MODE] Relay will close for " + str(sHangB) + "s and then once reopened,")
@@ -167,7 +169,7 @@ def authBouncer():
         print("[MODE] System panicked.")
         errLvl = 44
     elif cMode == 3040: # Auth-mode cycle limit set.
-        cycleLimit = 12
+        cycleLimit = rTimeout
         print("[MODE] Auth-mode active, system armed. ")
         print("")
         print("[MODE] Reader will initialize and you will have ~28s to scan a registered")
