@@ -4,7 +4,7 @@ import os
 import gc
 import ujson
 
-# fileRW Version 1.0.8
+# fileRW Version 1.0.9
 
 ## Basic File Manipulation.
 # Create a new file.
