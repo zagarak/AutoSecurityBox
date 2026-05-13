@@ -8,8 +8,9 @@
   "_C5":"m0 - mode (auth-mode, standby-mode, panic-mode) as int.",
   "_C6":"arm_sleep - armed starter-circuit-closed-hangtime as int.",
   "_C7":"disarm_sleep - disarmed starter-circuit-closed-hangtime as int."
-  "_C8":"reader_sleep - reader-polling-cycle-sleep as float."
+  "_C8":"reader_sleep - reader-cycle-sleep as float."
+  "_C9":"reader_timeout - reader-total-cycles as int."
   "_END":"End of comments."
 }
 
-{"c0": 12345678, "c1": 123456789, "c2": 876543210, "m0": 3040, "arm_sleep": 11, "disarm_sleep": 7, "reader_sleep": 1.2}
+{"c0": 12345678, "c1": 123456789, "c2": 876543210, "m0": 3040, "arm_sleep": 11, "disarm_sleep": 7, "reader_sleep": 1.2, "reader_timeout": 12}
