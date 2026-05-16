@@ -23,7 +23,8 @@ On the initial run, ``main.py`` will generate ``config.json`` in ``/``. Using Th
 ## Dependencies
 
 This project depends on [micropython-mfrc522](https://github.com/wendlers/micropython-mfrc522/).<br />
-After flashing firmware, place ``mfrc522.py`` and ``fileRW.py`` in the ``/lib`` directory of the board.
+After flashing firmware, place ``mfrc522.py`` and ``fileRW.py`` in the ``/lib`` directory of the board.<br />
+For instructions on flashing MicroPython to Pico or for other information, see its [documentation](https://www.raspberrypi.com/documentation/microcontrollers/micropython.html)
 <br />
 | Firmware Version     | Board            | Status          |
 | -------------------- | ---------------- | --------------- |
