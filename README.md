@@ -1,9 +1,4 @@
 # AutoSecurityBox
-| Firmware Version     | Board            | Status          |
-| -------------------- | ---------------- | --------------- |
-| MicroPython v1.23.0  | RP2040/Pico 2020 | Tested, Working |
-| MicroPython v1.28.0  | RP2040/Pico 2020 | Testing         |
-<br />
 This repository does not provide releases. You may clone it and use it directly or fork it for your own project.
 
 ## About
@@ -29,6 +24,11 @@ On the initial run, ``main.py`` will generate ``config.json`` in ``/``. Using Th
 
 This project depends on [micropython-mfrc522](https://github.com/wendlers/micropython-mfrc522/).<br />
 After flashing firmware, place ``mfrc522.py`` and ``fileRW.py`` in the ``/lib`` directory of the board.
+<br />
+| Firmware Version     | Board            | Status          |
+| -------------------- | ---------------- | --------------- |
+| MicroPython v1.23.0  | RP2040/Pico 2020 | Tested, Working |
+| MicroPython v1.28.0  | RP2040/Pico 2020 | Testing         |
 
 ## Features & Operating Objective
 The goal of this project is to provide security for parked vehicles that lack native anti-theft systems. AutoSecurityBox implements a dual-mode approach to provide security when it is necessary and maintain simplicity and reliability when it is not, especially during active operation of the vehicle and while recovering from stalls.
