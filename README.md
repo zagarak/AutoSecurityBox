@@ -1,6 +1,9 @@
 # AutoSecurityBox
-Tested on: Micropython v1.23.0 | Raspberry Pi Pico 2020<br />
-This repository does not provide releases. You may clone it and use it directly or fork the project.
+| Firmware Version    | Board            | Status          |
+| ------------------- | ---------------- | --------------- |
+| MicroPython 1.23.0  | RP2040/Pico 2020 | Tested, Working |
+<br />
+This repository does not provide releases. You may clone it and use it directly or fork it for your own project.
 
 ## About
 AutoSecurityBox is a Micropython based security project geared towards enhancing the security of older vehicles that lack transponder keys or keyless ignitions by switching the starter solenoid wire immediately after the ignition switch inside the steering column by placing a logic-level switched relay in the circuit. Thereby preventing potential thieves easily accessing the starter circuit under the dash and bypassing the ignition lock cylinder, increasing the time, skill, and foreknowledge required to steal the car. 
