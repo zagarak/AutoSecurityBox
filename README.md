@@ -1,7 +1,7 @@
 # AutoSecurityBox
-| Firmware Version    | Board            | Status          |
-| ------------------- | ---------------- | --------------- |
-| MicroPython 1.23.0  | RP2040/Pico 2020 | Tested, Working |
+| Firmware Version     | Board            | Status          |
+| -------------------- | ---------------- | --------------- |
+| MicroPython v1.23.0  | RP2040/Pico 2020 | Tested, Working |
 <br />
 This repository does not provide releases. You may clone it and use it directly or fork it for your own project.
 
