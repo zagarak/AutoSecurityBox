@@ -1,5 +1,5 @@
 ## AutoSecurityBox by Zagarak
-# Written for Micropython v1.23.0 on Raspberry Pi Pico 2020.
+# Written for Micropython on RP2040/Pico 2020/Arduino.
 ## Libraries and modules.
 import os
 import sys
@@ -13,7 +13,7 @@ from mfrc522 import MFRC522 # Wendlers Micropython MFRC522 library.
 # Version number and codename.
 vmajor = 1 # Incriment when major changes are made to code or vminor + 1 > 9.
 vminor = 5 # Incriment when significant changes are made to functionality or vpatch + 1 > 9.
-vpatch = 2 # Incriment when minor changes are made to syntax or readability.
+vpatch = 3 # Incriment when minor changes are made to syntax or readability.
 vernum = "v" + str(vmajor) + "." + str(vminor) + "." + str(vpatch)
 codenam = "s3c0ndf4ct0r"
 
@@ -28,7 +28,7 @@ def blinkLight(blinks): # Blinks security light to indicate exit or status code.
     ledState = secLight.value() # Get current security light state.
     if ledState == 1: # If security light is on, turn it off to improve flash code readability.
         secLight.value(0)
-        sleep(0.4)
+        sleep(0.4) # Exit code flash delay for readability.
     for i in range(blinks): # Number of blinks as int.
         secLight.value(1)
         sleep(0.3)
@@ -69,14 +69,14 @@ def setupConfig():
         rSleep = fileRW.readJSON("config.json", "reader_sleep")
         sHangA = fileRW.readJSON("config.json", "arm_sleep")
         sHangB = fileRW.readJSON("config.json", "disarm_sleep")
-        rTimeout = fileRw.readJSON("config.json", "reader_timeout")
+        rTimeout = fileRW.readJSON("config.json", "reader_timeout")
         accessCardA = fileRW.readJSON("config.json", "c0")
         accessCardB = fileRW.readJSON("config.json", "c1")
         accessCardC = fileRW.readJSON("config.json", "c2")
         print("[MEM] Loaded config.")
     elif fExists == False: # If not exists, create. 
         print("[MEM] Generating default config...")
-        # JSON format is fname, cardA, cardB, mode0, disarmed-ul-timeout, armed-ul-timeout, reader-sleep, reader_timeout.
+        # JSON format is fname, cardA, cardB, mode0, disarmed-ul-timeout, armed-ul-timeout, reader-sleep, reader-timeout.
         # Default setup values. Adjust in config.json after generation.
         fileRW.setupJSON("config.json", 12345678, 87654321, 98765432, 1010, 11, 7, 1.2, 12)
     else:
@@ -84,7 +84,7 @@ def setupConfig():
 
 # Starter unlock function.
 def unlockStarter(sHold): # Unlock starter for the specified amount of time.
-    print("[AUTH] Starter relay will unlock in 200ms!")
+    print("[AUTH] Starter will unlock in 200ms!")
     sleep(0.2)
     relay0.value(1)
     print("[AUTH] Unlocked for " + str(float(sHold) * 1000) + "ms...")
@@ -100,8 +100,8 @@ def unlockStarter(sHold): # Unlock starter for the specified amount of time.
 # Initialize Reader Function.
 def initReader(cycles):
     global card
+    card = 0 # Set default card value to 0 for detecting no card state.
     tick = 0
-    card = 0
     for i in range(cycles):
         reader.init()
         print("[ASB] Reader initialised succesfully.")
@@ -120,6 +120,7 @@ def initReader(cycles):
                 print("[RDR] -----------------------")
                 # Convert card UID bytes to int.
                 card = int.from_bytes(bytes(uid), "little", False)
+                # Comment out the following line for added security in the debug console.
                 print("[RDR]   CARD UID: " + str(card))
                 print("[RDR] =======================")
                 print("")
@@ -130,18 +131,17 @@ def initReader(cycles):
             print("[RDR] No card detected during this cycle. | Cycle: (" + str(tick) + "/" + str(cycleLimit) + ")")
             
 # Handle Authorization Function.
-def authBouncer():
-    #global card
+def initAuth():
     global errLvl
     global cycleLimit
     errLvl = 0 # Starting error level.
     if cMode == 1010: # Standby-mode call unlockStarter() and then set reader cycle limit.
-        cycleLimit = rTimeout / 4
+        cycleLimit = rTimeout / 4 # Shorten cycle limit to one-quarter when in standby-mode.
         print("[MODE] Standby-mode active, system disarmed.")
         print("")
-        print("[MODE] Relay will close for " + str(sHangB) + "s and then once reopened,")
-        print("[MODE] you may scan a registered card within ~3s to switch the system to auth-mode.")
-        print("[MODE] ")
+        print("[MODE] Starter will unlock for " + str(sHangB) + "s and then once locked,")
+        print("[MODE] you will have " + str(cycleLimit * rSleep) + "s to scan a registered")
+        print("[MODE] card and switch to auth-mode. Otherwise, system will exit with no change.")
         print("")
         sleep(0.2) # Security light flash buffer sleep.
         unlockStarter(sHangB) # Initiate standby-mode unlock before reader initializes.
@@ -162,20 +162,20 @@ def authBouncer():
         elif card == 0: # If no card was scanned, exit on timeout.
             print("[ASB] Reader timed out.")
             errLvl = 22
-        else:
+        else: # If card is anything other than 0 or registered card, warn card is unregistered.
             print("[AUTH] Invalid Card! | Presented card is unregistered.")
             # No panic required when requesting auth-mode from standby-mode.
     elif cMode == 4003: # If in panic-mode, break before reader.init().
         print("[MODE] System panicked.")
         errLvl = 44
     elif cMode == 3040: # Auth-mode cycle limit set.
-        cycleLimit = rTimeout
+        cycleLimit = rTimeout # Get cycleLimit from config.
         print("[MODE] Auth-mode active, system armed. ")
         print("")
         print("[MODE] Reader will initialize and you will have ~28s to scan a registered")
-        print("[MODE] card. Once a valid card has been scanned, relay will close for " + str(sHangA) + "s")
-        print("[MODE] and then once reopened, mode will be set to auth-mode in config and")
-        print("[MODE] then system will exit.")
+        print("[MODE] card. Once a valid card has been scanned, starter will unlock for " + str(sHangA) + "s")
+        print("[MODE] and then once locked, mode will be set to standby-mode and then")
+        print("[MODE] system will exit.")
         print("")
         initReader(cycleLimit) # Reader cycles as int.
         if card == accessCardA:
@@ -199,8 +199,9 @@ def authBouncer():
         elif card == 0: # If no card was scanned, exit on timeout.
             print("[ASB] Reader timed out.")
             errLvl = 22
-        else: # Wrong card attempt limit goes here if implemented.
-            print("[AUTH] Invalid Card! | Presented card is unregistered. System will PANIC!")
+        else: # If card is anything other than 0 or registered card, panic system.
+            print("[AUTH] Invalid Card! | Presented card is unregistered.")
+            print("[AUTH] System will PANIC!")
             fileRW.amendJSON("config.json", "m0", 4003)
             print("[BOARD] Board will reset. Power cycle required to continue.")
             sleep(2)
@@ -225,7 +226,7 @@ try:
     print("[ASB] Initializing...")
     print("")
     secLight.value(1)
-    authBouncer()
+    initAuth()
     sleep(0.1)
 # Try-fail general exception catch.
 except:
