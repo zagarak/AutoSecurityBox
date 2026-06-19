@@ -2,8 +2,8 @@
 This repository does not provide releases. You may clone it and use it directly or fork it for your own project.
 
 ## About
- AutoSecurityBox is a project that aims to enhance the security of classic and antique vehicles that lack transponder keys or keyless ignitions by switching the starter solenoid wire with a logic-level relay immediately after the ignition switch inside the steering column. The controller then emulates the function of a transponder key by adding an access layer in between the driver and the vehicle.
- The driver presents a registered card to a hidden reader antenna, then ASB hashes the UID of the card and compares it to a stored hash. If they match the relay closes and the vehicle can then be started as normal. If the presented card does not match a valid record then the script will panic and lockout, preventing future attempts at starting the vehicle until you reset it.
+   AutoSecurityBox is a project that aims to enhance the security of classic and antique vehicles that lack transponder keys or keyless ignitions by switching the starter solenoid wire with a logic-level relay immediately after the ignition switch inside the steering column. The controller then emulates the function of a transponder key by adding an access layer in between the driver and the vehicle.
+   The driver presents a registered card to a hidden reader antenna, then ASB hashes the UID of the card and compares it to a stored hash. If they match the relay closes and the vehicle can then be started as normal. If the presented card does not match a valid record then the script will panic and lockout, preventing future attempts at starting the vehicle until you reset it.
 
 ## Precautions, Safety, & Disclaimers
 - Do **not** wire in a way that prevents vehicle operation during emergencies.
