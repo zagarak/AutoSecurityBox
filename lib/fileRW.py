@@ -1,5 +1,5 @@
-## File-Read-Write-JSON-Manipulation Module
-# For AutoSecurityBox, Written by Zagarak.
+## File-Read-Write Module
+# For Micropython, Written by Zagarak.
 import os
 import gc
 import ujson
@@ -9,6 +9,7 @@ import binascii
 # fileRW Version 2.0.1
 
 ## Basic File Manipulation.
+
 # Create a new file.
 def touchFile(fName, content):
     try:
@@ -125,6 +126,8 @@ def amendJSON(fname, reqVar, newValue):
         print("[FRW] JSON amended.")
 
 ## Filesystem information requests.
+# This section is under development. 03/25/2026 @ 10:28
+
 # Output free memory stats to debug console.
 def getRAM(): # Get heap free RAM.
     gc.collect() # Run a garbage collect.
@@ -133,7 +136,7 @@ def getRAM(): # Get heap free RAM.
     fOut = str(fMem) + " bytes (" + str(cMem) + ") KB free."
     return fOut
 def getNOR(): # Get board free flash.
-    sFs = os.statvfs('/')
+    sFs = os.statvfs('/') # Test for 'os' module functionality. For an alternative, use 'uos'.
     bSize = sFs[0]
     bFree = sFs[3]
     fBytes = bSize * bFree
@@ -153,5 +156,4 @@ def cUID(vIn):
         print("[FRW/WARN] Error: Failed to hash input.")
     else:
         return str(hOut)
-
 ## EOF
