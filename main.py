@@ -1,25 +1,25 @@
 ## AutoSecurityBox by Zagarak
 # Written for Micropython on RP2040/Pico 2020/Arduino.
-## Libraries and modules.
+## Import Libraries and modules.
 import os
 import sys
-import fileRW # Depends on fileRW Version 2.0.0
+import fileRW # Depends on fileRW Version 2.0.1
 import machine
 from utime import sleep
 from machine import Pin, PWM
 from mfrc522 import MFRC522 # Wendlers Micropython MFRC522 library.
 
 ## Version Handling.
-# Version number and codename.
+# Version number, and codename variables.
 vmajor = 1 # Incriment when major changes are made to code or vminor + 1 > 9.
 vminor = 6 # Incriment when significant changes are made to functionality or vpatch + 1 > 9.
-vpatch = 0 # Incriment when minor changes are made to syntax or readability.
+vpatch = 2 # Incriment when minor changes are made to syntax or readability.
 vernum = "v" + str(vmajor) + "." + str(vminor) + "." + str(vpatch)
 codenam = "s3c0ndf4ct0r"
 
 ## Pin declarations.
 relay0 = Pin(15, Pin.OUT) # Declare starter circuit relay.
-secLight = Pin(12, Pin.OUT) # Declare security light.
+secLight = Pin(12, Pin.OUT) # Declare security/status light.
 reader = MFRC522(spi_id=0,sck=18,miso=20,mosi=19,cs=2,rst=22) # Declare reader Antenna.
 
 ## Core Functions.
@@ -74,6 +74,7 @@ def setupConfig():
         accessCardB = fileRW.readJSON("config.json", "c1")
         accessCardC = fileRW.readJSON("config.json", "c2")
         print("[MEM] Loaded config.")
+        print("")
     elif fExists == False: # If not exists, create. 
         print("[MEM] Generating default config...")
         # JSON format is fname, cardA, cardB, mode0, disarmed-ul-timeout, armed-ul-timeout, reader-sleep, reader-timeout.
@@ -87,12 +88,14 @@ def unlockStarter(sHold): # Unlock starter for the specified amount of time.
     print("[AUTH] Starter will unlock in 200ms!")
     sleep(0.2)
     relay0.value(1)
-    print("[AUTH] Unlocked for " + str(float(sHold) * 1000) + "ms...")
+    # Moved parenthesis in v1.5.4. Old statement: str(float(sHold) * 100)
+    # New statement: str(float(sHold * 1000))
+    print("[AUTH] Unlocked for " + str(float(sHold * 1000)) + "ms...")
     secLight.value(0) # Turn security light off while starter is unlocked.
     sleep(float(sHold))
     relay0.value(0)
-    print("[AUTH] Locked! Security light will illuminate briefly")
-    print("[AUTH] before exit-code flashes are displayed.")
+    print("[AUTH] Locked! Security light will illuminate briefly before")
+    print("[AUTH] exit-code flashes are displayed.")
     print("")
     sleep(0.1)
     secLight.value(1) # Once relocked, reactivate security light.
@@ -113,15 +116,14 @@ def initReader(cycles):
             print("[RDR] Card detected! Attempting read, please wait...")
             (stat, uid) = reader.SelectTagSN()
             if stat == reader.OK:
+                cuid = int.from_bytes(bytes(uid), "little", False)
+                card = fileRW.cUID(str(cuid))
                 print("[RDR] Card read successfully.")
                 print("")
                 print("[RDR] =======================")
                 print("[RDR]   SCAN RESULTS")
                 print("[RDR] -----------------------")
-                # Convert card UID bytes to int.
-                cuid = int.from_bytes(bytes(uid), "little", False)
-                card = fileRW.hashUID(str(cuid))
-                print("[RDR]   CARD UID: " + str(card))
+                print("[RDR]   CARD UID: " + str(cuid))
                 print("[RDR] =======================")
                 print("")
                 break
@@ -181,18 +183,21 @@ def initAuth():
         if card == accessCardA:
             print("[AUTH] Access Granted! | Presented card matches a valid record.")
             print("")
+            blinkLight(2) # Blink light twice to indicate card read.
             unlockStarter(sHangA)
             fileRW.amendJSON("config.json", "m0", 1010)
             errLvl = 33
         elif card == accessCardB:
             print("[AUTH] Access Granted! | Presented card matches a valid record.")
             print("")
+            blinkLight(2)
             unlockStarter(sHangA)
             fileRW.amendJSON("config.json", "m0", 1010)
             errLvl = 33
         elif card == accessCardC:
             print("[AUTH] Access Granted! | Presented card matches a valid record.")
             print("")
+            blinkLight(2)
             unlockStarter(sHangA)
             fileRW.amendJSON("config.json", "m0", 1010)
             errLvl = 33
@@ -202,6 +207,7 @@ def initAuth():
         else: # If card is anything other than 0 or registered card, panic system.
             print("[AUTH] Invalid Card! | Presented card is unregistered.")
             print("[AUTH] System will PANIC!")
+            blinkLight(3) # Blink light thrice to indicate invalid card.
             fileRW.amendJSON("config.json", "m0", 4003)
             print("[BOARD] Board will reset. Power cycle required to continue.")
             sleep(2)
