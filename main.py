@@ -3,7 +3,7 @@
 ## Libraries and modules.
 import os
 import sys
-import fileRW # Depends on fileRW Version 1.0.9.
+import fileRW # Depends on fileRW Version 2.0.0
 import machine
 from utime import sleep
 from machine import Pin, PWM
@@ -12,8 +12,8 @@ from mfrc522 import MFRC522 # Wendlers Micropython MFRC522 library.
 ## Version Handling.
 # Version number and codename.
 vmajor = 1 # Incriment when major changes are made to code or vminor + 1 > 9.
-vminor = 5 # Incriment when significant changes are made to functionality or vpatch + 1 > 9.
-vpatch = 3 # Incriment when minor changes are made to syntax or readability.
+vminor = 6 # Incriment when significant changes are made to functionality or vpatch + 1 > 9.
+vpatch = 0 # Incriment when minor changes are made to syntax or readability.
 vernum = "v" + str(vmajor) + "." + str(vminor) + "." + str(vpatch)
 codenam = "s3c0ndf4ct0r"
 
@@ -99,7 +99,7 @@ def unlockStarter(sHold): # Unlock starter for the specified amount of time.
 
 # Initialize Reader Function.
 def initReader(cycles):
-    global card
+    global cuid
     card = 0 # Set default card value to 0 for detecting no card state.
     tick = 0
     for i in range(cycles):
@@ -119,9 +119,8 @@ def initReader(cycles):
                 print("[RDR]   SCAN RESULTS")
                 print("[RDR] -----------------------")
                 # Convert card UID bytes to int.
-                card = int.from_bytes(bytes(uid), "little", False)
-                # Comment out the following line for added security in the debug console.
-                print("[RDR]   CARD UID: " + str(card))
+                cuid = int.from_bytes(bytes(uid), "little", False)
+                print("[RDR]   CARD UID: " + str(cuid))
                 print("[RDR] =======================")
                 print("")
                 break
@@ -134,6 +133,7 @@ def initReader(cycles):
 def initAuth():
     global errLvl
     global cycleLimit
+    card = fileRW.hashUID(str(cuid))
     errLvl = 0 # Starting error level.
     if cMode == 1010: # Standby-mode call unlockStarter() and then set reader cycle limit.
         cycleLimit = rTimeout / 4 # Shorten cycle limit to one-quarter when in standby-mode.
