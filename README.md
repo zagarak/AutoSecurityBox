@@ -18,7 +18,7 @@ To get started, follow ``schema.png`` to wire board and modules. You may also re
 
 After the board and modules are assembled, choose an enclosure and mounting location. I chose to mount mine inside the steering column, positioning the reader in a manner so that cards could be read through the plastic column. Then place ``main.py`` in the ``/`` directory of the board using a USB cable and your choice of IDE. See [dependencies](#dependencies).
 
-On the initial run, ``main.py`` will generate ``config.json`` in ``/``. Using Thonny or your preferred IDE, run ``main.py`` again and wait for the reader to initialize (~7-10 seconds) and then scan the card you wish to register. The debug console will print the UID of the card. Copy it or write it down and then stop ``main.py``. Then edit ``config.json`` and replace the JSON data keys ``c0``, ``c1``, and/or ``c2`` with the UID of your card(s). Now run ``main.py`` one more time and verify that scanning the card results in an "Access Granted!" print statement.
+On the initial run, ``main.py`` will generate ``config.json`` in ``/``. Using Thonny or your preferred IDE, run ``main.py`` again and wait for the reader to initialize (~7-10 seconds) and then scan the card you wish to register. The debug console will print the UID of the card. Copy it or write it down and then stop ``main.py``. Then edit ``config.json`` and replace the JSON data keys ``c0``, ``c1``, and/or ``c2`` with the SHA256 hash of the UID of your card(s). Now run ``main.py`` one more time and verify that scanning the card results in an "Access Granted!" print statement.
 
 ## Dependencies
 
@@ -46,7 +46,7 @@ If no card is scanned, it will exit on "routine-timeout".
 For added security: If three read attempts are made with an invalid card, it overwrites the data key ``m0`` with the value ``4003`` and then resets the board. This puts the program into a tertiary mode that will refuse to initialize the reader or actuate the starter relay; Instead exiting on "system-panic" until ``m0`` is updated to either ``3040`` or ``1010``.
 
 ## Additional Notes
-Card UIDs are not encrypted or obscured in any way. The goal of this project is not government quality security. Instead, the hope is to increase the difficulty, time, and technical requirements for a potential thief to get away with the vehicle. In the future I plan to also control the fuel pump or ignition system. Though, this would require the board and relays to remain powered during operation of the vehicle.
+~~Card UIDs are not encrypted or obscured in any way.~~ **I have implemented rudimentary support for SHA256 hashing of scanned card UIDs and comparison of stored UID hashes. You will have to manually hash your UIDs to input them into config.json.** The goal of this project is not government quality security. Instead, the hope is to increase the difficulty, time, and technical requirements for a potential thief to get away with the vehicle. In the future I plan to also control the fuel pump or ignition system. Though, this would require the board and relays to remain powered during operation of the vehicle.
 
 Mode values are arbitrary and may be changed by the end user so long as each corresponding reference in ``main.py`` is also changed to match its partner. They exist solely to act as a magic number so that the Microcontroller can track state changes between power cycles without a backup battery.
 
