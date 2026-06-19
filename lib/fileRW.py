@@ -1,5 +1,5 @@
 ## File-Read-Write Module
-# For Micropython, Written by Zagarak.
+# For AutoSecurityBox on Micropython, Written by Zagarak.
 import os
 import gc
 import ujson
@@ -136,7 +136,7 @@ def getRAM(): # Get heap free RAM.
     fOut = str(fMem) + " bytes (" + str(cMem) + ") KB free."
     return fOut
 def getNOR(): # Get board free flash.
-    sFs = os.statvfs('/') # Test for 'os' module functionality. For an alternative, use 'uos'.
+    sFs = os.statvfs('/') # Works.
     bSize = sFs[0]
     bFree = sFs[3]
     fBytes = bSize * bFree
