@@ -99,7 +99,7 @@ def unlockStarter(sHold): # Unlock starter for the specified amount of time.
 
 # Initialize Reader Function.
 def initReader(cycles):
-    global cuid
+    global card
     card = 0 # Set default card value to 0 for detecting no card state.
     tick = 0
     for i in range(cycles):
@@ -120,7 +120,8 @@ def initReader(cycles):
                 print("[RDR] -----------------------")
                 # Convert card UID bytes to int.
                 cuid = int.from_bytes(bytes(uid), "little", False)
-                print("[RDR]   CARD UID: " + str(cuid))
+                card = fileRW.hashUID(str(cuid))
+                print("[RDR]   CARD UID: " + str(card))
                 print("[RDR] =======================")
                 print("")
                 break
@@ -133,7 +134,6 @@ def initReader(cycles):
 def initAuth():
     global errLvl
     global cycleLimit
-    card = fileRW.hashUID(str(cuid))
     errLvl = 0 # Starting error level.
     if cMode == 1010: # Standby-mode call unlockStarter() and then set reader cycle limit.
         cycleLimit = rTimeout / 4 # Shorten cycle limit to one-quarter when in standby-mode.
