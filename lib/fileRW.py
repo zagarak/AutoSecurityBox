@@ -3,8 +3,10 @@
 import os
 import gc
 import ujson
+import hashlib
+import binascii
 
-# fileRW Version 1.0.9
+# fileRW Version 2.0.0
 
 ## Basic File Manipulation.
 # Create a new file.
@@ -138,4 +140,18 @@ def getNOR(): # Get board free flash.
     kBytes = fBytes / 1000
     bOut = str(fBytes) + " bytes (" + str(kBytes) + ") KB free."
     return bOut
+
+## SHA256 Hashing Functions.   
+# Generate hash from input.
+def hashUID(vIn):
+    try:
+        sIn = str(vIn)
+        hEnc = hashlib.sha256(sIn.encode())
+        raw = hEnc.digest()
+        hOut = binascii.hexlify(raw).decode()
+    except:
+        print("[FRW/WARN] Error: Failed to hash input.")
+    else:
+        return str(hOut)
+
 ## EOF
