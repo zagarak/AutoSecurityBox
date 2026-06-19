@@ -2,16 +2,17 @@
 This repository does not provide releases. You may clone it and use it directly or fork it for your own project.
 
 ## About
-AutoSecurityBox is a Micropython based security project geared towards enhancing the security of older vehicles that lack transponder keys or keyless ignitions by switching the starter solenoid wire immediately after the ignition switch inside the steering column by placing a logic-level switched relay in the circuit. Thereby preventing potential thieves easily accessing the starter circuit under the dash and bypassing the ignition lock cylinder, increasing the time, skill, and foreknowledge required to steal the car. 
-
-To do this I used a Raspberry Pi Pico 2020 board, LM2596 Buck Converter, Momentary Power Switch, RC522 Card Reader, a single 3V3 relay module, and an LED to display exit codes to the driver. Wiring is pretty straight forward. Refer to schema.png for wiring instructions. (PIN numbers listed may not correspond to actual physical location)
+ AutoSecurityBox is a project that aims to enhance the security of classic and antique vehicles that lack transponder keys or keyless ignitions by switching the starter solenoid wire with a logic-level relay immediately after the ignition switch inside the steering column. The controller then emulates the function of a transponder key by adding an access layer in between the driver and the vehicle.
+ The driver presents a registered card to a hidden reader antenna, then ASB hashes the UID of the card and compares it to a stored hash. If they match the relay closes and the vehicle can then be started as normal. If the presented card does not match a valid record then the script will panic and lockout, preventing future attempts at starting the vehicle until you reset it.
 
 ## Precautions, Safety, & Disclaimers
 - Do **not** wire in a way that prevents vehicle operation during emergencies.
 - Follow automotive electrical safety standards: fuse power lines, verify wiring before connection, and disconnect the battery before installation/testing.
 - This is **not tamper-proof** security; it increases the time and skill required to steal the car.
 - You are **solely responsible for your safety** and the functionality/warranty of your vehicle.
-
+- For safety purposes I have programmed ASB with a built in "standby-mode".
+- It is recommended to leave the vehicle in standby-mode during normal operation in case of engine stall so you can recover it without presenting a card.
+- For this reason after a valid card is presented in auth-mode, by default the system automatically switches to standby-mode.
 
 ## Setup
 To get started, follow ``schema.png`` to wire board and modules. You may also refer to [this page](https://github.com/wendlers/micropython-mfrc522/blob/master/README.md) for detailed reader setup instructions.
