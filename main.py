@@ -78,7 +78,7 @@ def setupConfig():
         print("[MEM] Generating default config...")
         # JSON format is fname, cardA, cardB, mode0, disarmed-ul-timeout, armed-ul-timeout, reader-sleep, reader-timeout.
         # Default setup values. Adjust in config.json after generation.
-        fileRW.setupJSON("config.json", 12345678, 87654321, 98765432, 1010, 11, 7, 1.2, 12)
+        fileRW.setupJSON("config.json", "HASH0", "HASH1", "HASH2", 1010, 11, 7, 1.2, 12)
     else:
         print("[MEM] An error occured while setting up config.")
 
