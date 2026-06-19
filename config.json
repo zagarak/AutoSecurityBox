@@ -2,9 +2,9 @@
   "_COMMENTS":"Comments"
   "_C0":"This is an example configuration for reference only.",
   "_C1":"Allow main.py to generate its own config.json on first run.",
-  "_C2":"c0 - card0 UID as int.",
-  "_C3":"c1 - card1 UID as int.",
-  "_C4":"c2 - card2 UID as int.",
+  "_C2":"c0 - card0 UID as str.",
+  "_C3":"c1 - card1 UID as str.",
+  "_C4":"c2 - card2 UID as str.",
   "_C5":"m0 - mode (auth-mode, standby-mode, panic-mode) as int.",
   "_C6":"arm_sleep - armed starter-circuit-closed-hangtime as int.",
   "_C7":"disarm_sleep - disarmed starter-circuit-closed-hangtime as int."
