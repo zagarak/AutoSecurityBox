@@ -48,7 +48,7 @@ For added security: If three read attempts are made with an invalid card, it ove
 ## Additional Notes
 ~~Card UIDs are not encrypted or obscured in any way.~~ <br />
 <br />
-**I have implemented rudimentary support for SHA256 hashing of scanned card UIDs and comparison of stored UID hashes. You will have to manually hash your UIDs to input them into config.json.** <br />
+**I have implemented rudimentary support for SHA256 hashing of scanned card UIDs and comparison of stored UID hashes. You will have to manually hash your UIDs before inputting them into config.json.** <br />
 <br />
 The goal of this project is not government quality security. Instead, the hope is to increase the difficulty, time, and technical requirements for a potential thief to get away with the vehicle. In the future I plan to also control the fuel pump or ignition system. Though, this would require the board and relays to remain powered during operation of the vehicle.
 
