@@ -6,7 +6,7 @@ import ujson
 import hashlib
 import binascii
 
-# fileRW Version 2.0.0
+# fileRW Version 2.0.1
 
 ## Basic File Manipulation.
 # Create a new file.
@@ -143,7 +143,7 @@ def getNOR(): # Get board free flash.
 
 ## SHA256 Hashing Functions.   
 # Generate hash from input.
-def hashUID(vIn):
+def cUID(vIn):
     try:
         sIn = str(vIn)
         hEnc = hashlib.sha256(sIn.encode())
