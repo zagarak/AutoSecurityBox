@@ -88,8 +88,6 @@ def unlockStarter(sHold): # Unlock starter for the specified amount of time.
     print("[AUTH] Starter will unlock in 200ms!")
     sleep(0.2)
     relay0.value(1)
-    # Moved parenthesis in v1.5.4. Old statement: str(float(sHold) * 100)
-    # New statement: str(float(sHold * 1000))
     print("[AUTH] Unlocked for " + str(float(sHold * 1000)) + "ms...")
     secLight.value(0) # Turn security light off while starter is unlocked.
     sleep(float(sHold))
