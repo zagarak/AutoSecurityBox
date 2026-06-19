@@ -56,4 +56,4 @@ The goal of this project is to provide security for parked vehicles that lack na
 
 > You may notice a diode on ``5v+_Vsys`` in ``schema.png``. I added it between the supply and the microcontroller to isolate the converter output from the debug cable's ``5v+`` to prevent backfeeding of the buck converter during programming.
 
-***This project could easily be adapted for electronic door lock cylinders and servo-actuated access panel latches.**
+***This project could be adapted for electronic door lock cylinders for restricted access areas and servo-actuated access panel latches.**
