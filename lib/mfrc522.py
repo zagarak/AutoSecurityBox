@@ -402,3 +402,4 @@ class MFRC522:
             print("Authentication error")
             return self.ERR
         return self.OK
+# EOF
