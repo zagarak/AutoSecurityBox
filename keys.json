@@ -1,3 +1,10 @@
-
+{
+  "_COMMENTS":"Comments"
+  "_C0":"This is an example key file only.",
+  "_C1":"Allow main.py to generate its own keys.json on first run.",
+  "_C2":"Then you may populate your sha256 hashed UIDs and hash keys.json.",
+  "_C3":"Finally, store the keys.json hash in asb_hasher and ideally compile with firmware as a frozen module."
+  "_END":"End of comments."
+}
 
 {"c0": "HASH0", "c1": "HASH1", "c2": "HASH2"}
