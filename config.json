@@ -2,15 +2,12 @@
   "_COMMENTS":"Comments"
   "_C0":"This is an example configuration for reference only.",
   "_C1":"Allow main.py to generate its own config.json on first run.",
-  "_C2":"c0 - card0 UID as str.",
-  "_C3":"c1 - card1 UID as str.",
-  "_C4":"c2 - card2 UID as str.",
-  "_C5":"m0 - mode (auth-mode, standby-mode, panic-mode) as int.",
-  "_C6":"arm_sleep - armed starter-circuit-closed-hangtime as int.",
-  "_C7":"disarm_sleep - disarmed starter-circuit-closed-hangtime as int."
-  "_C8":"reader_sleep - reader-cycle-sleep as float."
-  "_C9":"reader_timeout - reader-total-cycles as int."
+  "_C2":"m0 - mode (auth-mode, standby-mode, panic-mode) as int.",
+  "_C3":"arm_sleep - armed starter-circuit-closed-hangtime as int.",
+  "_C4":"disarm_sleep - disarmed starter-circuit-closed-hangtime as int."
+  "_C5":"reader_sleep - reader-cycle-sleep as float."
+  "_C6":"reader_timeout - reader-total-cycles as int."
   "_END":"End of comments."
 }
 
-{"c0": "HASH0", "c1": "HASH1", "c2": "HASH2", "m0": 3040, "arm_sleep": 11, "disarm_sleep": 7, "reader_sleep": 1.2, "reader_timeout": 12}
+{"m0": 3040, "arm_sleep": 11, "disarm_sleep": 7, "reader_sleep": 1.2, "reader_timeout": 12}
