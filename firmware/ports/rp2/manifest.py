@@ -1,4 +1,4 @@
-# manifest.py
+# manifest.py - /micropython/ports/rp2/manifest.py
 # Place manifest.py in ports/rp2 of your micropython repo.
 # Then add asb modules to ports/rp2/module and build with manifest.
 # If you don't include _boot, _boot_fat, and rp2 you will not have filesystem access!
