@@ -1,7 +1,7 @@
 ## AutoSecurityBox by Zagarak
 # Written for Micropython on RP2040/Pico 2020/Arduino.
 
-__version__ = "1.7.1"
+__version__ = "1.7.4"
 
 import os
 import sys
@@ -18,6 +18,13 @@ secLight = Pin(12, Pin.OUT) # Declare security/status light.
 reader = MFRC522(spi_id=0,sck=18,miso=20,mosi=19,cs=2,rst=22) # Declare reader Antenna.
 
 ## Core Functions.
+
+# Suspend function. (MP v1.28.0 breaks machine.reset halt from v1.23.0)
+def suspend(secs):
+    print("[BOARD] Board will reset. Power cycle required to continue.")
+    sleep(secs)
+    machine.reset()
+
 # Status light function.
 def blinkLight(blinks): # Blinks security light to indicate exit or status code.
     ledState = secLight.value() # Get current security light state.
@@ -211,9 +218,8 @@ def initAuth():
             print("[AUTH] System will PANIC!")
             blinkLight(3) # Blink light thrice to indicate invalid card.
             asb_fman.amendJSON("config.json", "m0", 4003)
-            print("[BOARD] Board will reset. Power cycle required to continue.")
             sleep(2)
-            machine.reset()
+            suspend(180)
 
 # ------------------------- ASB MAIN -------------------------
 
@@ -275,5 +281,5 @@ if __name__ == "asb":
             blinkLight(3)
         print("[ASB] Exited with code: " + str(errLvl))
         sleep(0.1)
-        sys.exit()
+        suspend(180)
 # EOF
