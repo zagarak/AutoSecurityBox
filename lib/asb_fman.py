@@ -2,7 +2,7 @@
 # File Manipulation and Memory Reporting Module
 # For AutoSecurityBox on Micropython.
 
-__version__ = "2.0.2"
+__version__ = "2.0.3"
 
 import os
 import gc
@@ -150,7 +150,5 @@ def getNOR(): # Get board free flash.
     kBytes = fBytes / 1000
     bOut = str(fBytes) + " bytes (" + str(kBytes) + ") KB free."
     return bOut
-
-print("Name = " + str(__name__))
 
 ## EOF
