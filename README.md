@@ -1,5 +1,5 @@
 # AutoSecurityBox
-
+Open source vehicle security in a box!
 ## About
 > AutoSecurityBox is a project that aims to enhance the security of classic and antique vehicles that lack transponder keys or keyless ignitions by switching the starter solenoid coil wire with a logic-level relay immediately after the ignition switch inside the steering column. The controller emulates the function of a transponder key by preventing cranking of the vehicle until a valid nfc tag (or your choice of input) is detected.
     
