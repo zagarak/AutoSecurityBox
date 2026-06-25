@@ -5,7 +5,7 @@ __version__ = "1.7.4"
 
 import os
 import sys
-import asb_fman # Depends on asb_fman v2.0.2
+import asb_fman # Depends on asb_fman v2.0.3
 import asb_hasher # Depends on asb_hasher v0.0.1
 import machine
 from utime import sleep
