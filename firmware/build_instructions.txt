@@ -2,8 +2,8 @@
 # Minimal build instructions for RPI_PICO Micropython with module manifest.py.
 
 # Clone Micropython repository.
-git clone https://github.com/micropython/micropython.git
-cd micropython
+  git clone https://github.com/micropython/micropython.git
+  cd micropython
 
 # Navigate to ports/rp2.
 # Create manifest.py in the rp2 directory.
@@ -25,12 +25,12 @@ module("asb_hasher.py")
 # but the stored hash will be exposed and writable.
 
 # Edit version tag (if desired), add modules, commit changes, make submodules, clean build directory, and build with frozen modules.
-NEWTAG="v1.29.0-preview-custom"
-git tag -f "$NEWTAG" HEAD
-git commit -m "Custom version/banner changes"
-git status
-git add -A
-git commit
-make BOARD=RPI_PICO submodules
-make BOARD=RPI_PICO MANIFEST=manifest.py clean
-make BOARD=RPI_PICO MANIFEST=manifest.py
+  NEWTAG="v1.29.0-preview-custom"
+  git tag -f "$NEWTAG" HEAD
+  git commit -m "Custom version/banner changes"
+  git status
+  git add -A
+  git commit
+  make BOARD=RPI_PICO submodules
+  make BOARD=RPI_PICO MANIFEST=manifest.py clean
+  make BOARD=RPI_PICO MANIFEST=manifest.py
