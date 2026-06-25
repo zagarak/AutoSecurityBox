@@ -1,4 +1,6 @@
+# repository.txt
 # Official Download: https://micropython.org/download/RPI_PICO/
+# Repository: https://github.com/micropython/micropython
 
 # License for Micropython.
 # Link: docs.micropython.org/en/latest/license.html
