@@ -31,7 +31,7 @@ For instructions on flashing MicroPython to Pico or for other information, see i
 | Firmware Version     | Board            | Status          |
 | -------------------- | ---------------- | --------------- |
 | MicroPython v1.23.0  | RP2040/Pico 2020 | Tested, Working |
-| MicroPython v1.28.0  | RP2040/Pico 2020 | Testing         |
+| MicroPython v1.28.0  | RP2040/Pico 2020 | Tested, Working |
 
 ## Features & Operating Objective
 The goal of this project is to provide security for parked vehicles that lack native anti-theft systems. AutoSecurityBox implements a dual-mode approach to provide security when it is necessary and maintain simplicity and reliability when it is not, especially during active operation of the vehicle and while recovering from stalls.
@@ -46,9 +46,7 @@ The goal of this project is to provide security for parked vehicles that lack na
 > For added security: If three read attempts are made with an invalid card, it overwrites the data key ``m0`` with the value ``4003`` and then resets the board. This puts the program into a tertiary mode that will refuse to initialize the reader or actuate the starter relay; Instead exiting on "system-panic" until ``m0`` is updated to either ``3040`` or ``1010``.
 
 ## Additional Notes
-~~Card UIDs are not encrypted or obscured in any way.~~
-
-**I've implemented rudimentary support for SHA256 hashing of scanned card UIDs, stored UIDs, and the keyfile. You will have to manually hash your UIDs before inputting them into keys.json. Then hash keys.json and input it into asb_hasher.**
+**I've implemented rudimentary support for SHA256 hashing of scanned card UIDs, stored UIDs, and the keyfile. You will have to manually hash your UIDs before inputting them into keys.json. Then hash keys.json and input it into asb_hasher. For best security, hash your keys file and then include its hash in asb_hasher before building Micropython.**
 
 > The goal of this project is not government quality security. Instead, the hope is to increase the difficulty, time, and technical requirements for a potential thief to get away with the vehicle. In the future I plan to also control the fuel pump or ignition system. Though, this would require the board and relays to remain powered during operation of the vehicle.
 
@@ -56,4 +54,4 @@ The goal of this project is to provide security for parked vehicles that lack na
 
 > You may notice a diode on ``5v+_Vsys`` in ``schema.png``. I added it between the supply and the microcontroller to isolate the converter output from the debug cable's ``5v+`` to prevent backfeeding of the buck converter during programming.
 
-***This project could be adapted for electronic door lock cylinders for restricted access areas and servo-actuated access panel latches.**
+***This project could be adapted for restricted-access doors and access panels.**
