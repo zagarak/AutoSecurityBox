@@ -1,0 +1,36 @@
+# build_instructions.txt
+# Minimal build instructions for RPI_PICO Micropython with module manifest.py.
+
+# Clone Micropython repository.
+git clone https://github.com/micropython/micropython.git
+cd micropython
+
+# Navigate to ports/rp2.
+# Create manifest.py in the rp2 directory.
+# Add all custom modules to modules directory and include all modules in that directory in manifest.
+
+# minimal manifest.py
+module("_boot.py")
+module("_boot_fat.py")
+module("rp2.py")
+module("mfrc522.py")
+module("asb.py")
+module("asb_fman.py")
+module("asb_hasher.py")
+# End of manifest.
+
+# Do not forget to include _boot, _boot_fat, and rp2 or you will not have filesystem access once flashed!
+# Inclusion of asb, asb_fman, and mfrc522 are optional but any excluded modules must be present in /lib on board fs.
+# For secure 'keys.json' hash storage, asb_hasher needs to be frozen in firmware. It will work if included in /lib
+# but the stored hash will be exposed and writable.
+
+# Edit version tag (if desired), add modules, commit changes, make submodules, clean build directory, and build with frozen modules.
+NEWTAG="v1.29.0-preview-custom"
+git tag -f "$NEWTAG" HEAD
+git commit -m "Custom version/banner changes"
+git status
+git add -A
+git commit
+make BOARD=RPI_PICO submodules
+make BOARD=RPI_PICO MANIFEST=manifest.py clean
+make BOARD=RPI_PICO MANIFEST=manifest.py
