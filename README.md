@@ -1,8 +1,7 @@
 # AutoSecurityBox
-This repository does not provide releases. You may clone it and use it directly or fork it for your own project.
 
 ## About
-> AutoSecurityBox is a project that aims to enhance the security of classic and antique vehicles that lack transponder keys or keyless ignitions by switching the starter solenoid wire with a logic-level relay immediately after the ignition switch inside the steering column. The controller then emulates the function of a transponder key by adding an access layer in between the driver and the vehicle.
+> AutoSecurityBox is a project that aims to enhance the security of classic and antique vehicles that lack transponder keys or keyless ignitions by switching the starter solenoid coil wire with a logic-level relay immediately after the ignition switch inside the steering column. The controller emulates the function of a transponder key by preventing cranking of the vehicle until a valid nfc tag (or your choice of input) is detected.
     
 > The driver presents a registered card to a hidden reader antenna, then ASB hashes the UID of the card and compares it to a stored hash. If they match the relay closes and the vehicle can then be started as normal. If the presented card does not match a valid record then the script will panic and lockout, preventing future attempts at starting the vehicle until you reset it.
 
@@ -18,7 +17,7 @@ This repository does not provide releases. You may clone it and use it directly 
 ## Setup
 To get started, follow ``schema.png`` to wire board and modules. You may also refer to [this page](https://github.com/wendlers/micropython-mfrc522/blob/master/README.md) for detailed reader setup instructions.
 
-> After the board and modules are assembled, choose an enclosure and mounting location. I chose to mount mine inside the steering column, positioning the reader in a manner so that cards could be read through the plastic column. Then place ``main.py`` in the ``/`` directory of the board using a USB cable and your choice of IDE. See [dependencies](#dependencies).
+> After the board and external modules are assembled, choose an enclosure and mounting location. I chose to mount mine inside the steering column, positioning the reader in a manner so that cards could be read through the plastic column. Decide if you are using the Python modules as-is or if you are compiling them as bytecode in firmware. If you are using them as-is, place all modules in ``/lib``. Then place ``main.py`` in the ``/`` directory of the board using a USB cable and your choice of IDE. See [dependencies](#dependencies).
     
 > On the initial run, ``keys.json`` will be generated in ``/`` automatically. Using Thonny or your preferred IDE, run ``main.py`` again and wait for the reader to initialize (~7-10 seconds) and then scan the card you wish to register. The debug console will print the UID of the card. Copy it or write it down and then stop ``main.py``. Then edit ``keys.json`` and replace the JSON data keys ``c0``, ``c1``, and/or ``c2`` with the SHA256 hash of the UID of your card(s). Add the hash to asb_hasher variable ``kh``. Now run ``main.py`` one more time and verify that scanning the card results in an "Access Granted!" print statement.
 
