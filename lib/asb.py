@@ -2,14 +2,14 @@
 ## AutoSecurityBox by Zagarak
 # Written for Micropython on RP2040/Pico 2020/Arduino.
 
-__version__ = "1.7.4"
+__version__ = "1.7.5"
 
 import os
 import sys
 import asb_fman # Depends on asb_fman v2.0.3
-import asb_hasher # Depends on asb_hasher v0.0.1
+import asb_hasher # Depends on asb_hasher v0.0.2
 import machine
-from utime import sleep
+from time import sleep
 from machine import Pin, PWM
 from mfrc522 import MFRC522 # Wendlers Micropython MFRC522 library.
 
@@ -20,11 +20,17 @@ reader = MFRC522(spi_id=0,sck=18,miso=20,mosi=19,cs=2,rst=22) # Declare reader A
 
 ## Core Functions.
 
-# Suspend function. (MP v1.28.0 breaks machine.reset halt from v1.23.0)
-def suspend(secs):
-    print("[BOARD] Board will reset. Power cycle required to continue.")
-    sleep(secs)
-    machine.reset()
+# Program halt/suspend function.
+def suspend(deepT):
+    if deepT == True:
+        print("[PWR] Deep sleep active. Power cycle required to continue.")
+        machine.deepsleep() # Deep sleep indefinitely.
+    elif deepT == False:
+        print("[PWR] Light sleep active. Power cycle required to continue.")
+        machine.lightsleep() # Lightsleep indefinitely.
+        machine.reset() # Reset if lightsleep fails or on interrupt.
+    else: # Catch exception.
+        print("[PWR/WARN] An error occured in suspend().")
 
 # Status light function.
 def blinkLight(blinks): # Blinks security light to indicate exit or status code.
@@ -220,7 +226,7 @@ def initAuth():
             blinkLight(3) # Blink light thrice to indicate invalid card.
             asb_fman.amendJSON("config.json", "m0", 4003)
             sleep(2)
-            suspend(180)
+            suspend(True)
 
 # ------------------------- ASB MAIN -------------------------
 
@@ -282,5 +288,5 @@ if __name__ == "asb":
             blinkLight(3)
         print("[ASB] Exited with code: " + str(errLvl))
         sleep(0.1)
-        suspend(180)
+        suspend(True)
 # EOF
