@@ -6,8 +6,8 @@ __version__ = "1.7.5"
 
 import os
 import sys
-import asb_fman # Depends on asb_fman v2.0.3
-import asb_hasher # Depends on asb_hasher v0.0.2
+import asb_fman # Depends on v2.0.3
+import asb_hasher # Depends on v0.0.2
 import machine
 from time import sleep
 from machine import Pin, PWM
