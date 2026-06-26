@@ -2,12 +2,12 @@
 ## SHA256 Hashing and Key Integrity Management Module.
 # For AutoSecurityBox.
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 import machine
 import hashlib
 import binascii
-from utime import sleep
+from time import sleep
 
 def cnv_uid(vIn):
     hEnc = hashlib.sha256(str(vIn).encode())
