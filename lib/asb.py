@@ -19,7 +19,6 @@ secLight = Pin(12, Pin.OUT) # Declare security/status light.
 reader = MFRC522(spi_id=0,sck=18,miso=20,mosi=19,cs=2,rst=22) # Declare reader Antenna.
 
 ## Core Functions.
-
 # Program halt/suspend function.
 def suspend(deepT):
     if deepT == True:
