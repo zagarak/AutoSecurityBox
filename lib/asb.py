@@ -1,17 +1,18 @@
 # asb.py
-## AutoSecurityBox Initialization, Termination, and Error Handling Module.
+## AutoSecurityBox Initialization and Termination Module.
 # Written for Micropython on RP2040/Pico 2020/Arduino, by Zagarak.
 
-__version__ = "1.8.0"
+# This version number also corresponds to project version number.
+__version__ = "1.8.1"
 
 import sys
-import asb_auth # Depends on v0.0.4
+import asb_auth # Depends on v0.0.5
 from time import sleep
 
 if __name__ == "asb":
     asb_auth.check_config()
     try:
-        print("[ASB] AutoSecurityBox-v" + str(__version__) + "is starting...")
+        print("[ASB] AutoSecurityBox-v" + str(__version__) + " is starting...")
         print("")
         asb_auth.start_auth_proto()
         sleep(0.1)
