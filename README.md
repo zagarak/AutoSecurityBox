@@ -24,15 +24,14 @@ To get started, follow ``schema.png`` to wire board and modules. You may also re
 > On the initial run, ``keys.json`` will be generated in ``/`` automatically. Using Thonny or your preferred IDE, run ``main.py`` again and wait for the reader to initialize (~7-10 seconds) and then scan the card you wish to register. The debug console will print the UID of the card. Copy it or write it down and then stop ``main.py``. Then edit ``keys.json`` and replace the JSON data keys ``k0``, ``k1``, and ``k2`` with the SHA256 hash of the UID of the cards you wish to register. Then add the hash to ``asb_crypt`` variable ``kh``. Now run ``main.py`` one more time and verify that scanning the card results in an "Access Granted!" print statement.
 
 ## Dependencies
-
-This project depends on [micropython-mfrc522](https://github.com/wendlers/micropython-mfrc522/).<br />
-After flashing firmware, place ``mfrc522.py`` and ``fileRW.py`` in the ``/lib`` directory of the board.<br />
-For instructions on flashing MicroPython to Pico or for other information, see its [documentation](https://www.raspberrypi.com/documentation/microcontrollers/micropython.html)
-<br />
-| Firmware Version     | Board            | Status          |
-| -------------------- | ---------------- | --------------- |
-| MicroPython v1.23.0  | RP2040/Pico 2020 | Tested, Working |
-| MicroPython v1.28.0  | RP2040/Pico 2020 | Tested, Working |
+> ### <ins>**External:**</ins><br />
+> [micropython/micropython](https://github.com/micropython/micropython)<br />
+> [wendlers/micropython-mfrc522](https://github.com/wendlers/micropython-mfrc522/)<br />
+> ### <ins>**Internal:**</ins><br />
+> [lib/asb](https://github.com/zagarak/AutoSecurityBox/blob/main/lib/asb.py)<br />
+> [lib/asb_auth](https://github.com/zagarak/AutoSecurityBox/blob/main/lib/asb_auth.py)<br />
+> [lib/asb_crypt](https://github.com/zagarak/AutoSecurityBox/blob/main/lib/asb_crypt.py)<br />
+> [lib/asb_fman](https://github.com/zagarak/AutoSecurityBox/blob/main/lib/asb_fman.py)<br />
 
 ## Features & Operating Objective
 The goal of this project is to provide security for parked vehicles that lack native anti-theft systems. AutoSecurityBox implements a dual-mode approach to provide security when it is necessary and maintain simplicity and reliability when it is not, especially during active operation of the vehicle and while recovering from stalls.
