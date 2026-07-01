@@ -39,6 +39,7 @@ def rtn_f_hsh(path, chunk_size=512):
 ## Internal keys.json SHA256 hash (lowercase hex).
 # ----------------------------------------------------------------
 def rtn_hw_hsh():
+    # Put your keys.json file hash here.
     kh = "HASH3"
     return kh
 # ----------------------------------------------------------------
