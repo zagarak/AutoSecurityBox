@@ -2,7 +2,7 @@
 ## Authentication and Security Functions Module for AutoSecurityBox.
 # Written for Micropython.
 
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 import machine
 import asb_fman # Depends on v2.0.5
@@ -45,7 +45,7 @@ def check_config():
         print("[MEM] Generating default config...")
         # JSON format is fname, mode0, disarmed-ul-timeout, armed-ul-timeout, reader-sleep, reader-timeout.
         # Default setup values. Adjust in config.json after generation.
-        asb_fman.gen_config("config.json", 1010, 11, 7, 1.2, 12)
+        asb_fman.gen_config("config.json", "standby", 11, 7, 1.2, 12)
         sleep(1)
         machine.reset()
     else:
@@ -130,7 +130,7 @@ def start_auth_proto():
     print("")
     print("[ASB] Done.")
     print("")
-    if mode == 1010: # Standby-mode.
+    if mode == "standby": # Standby-mode.
         cycleLimit = rTimeout / 4 # Shorten cycle limit to one-quarter of normal when in standby-mode.
         print("[MODE] Standby-mode active, system disarmed.")
         print("")
@@ -143,15 +143,15 @@ def start_auth_proto():
         poll_reader(cycleLimit) # Reader cycles as int.
         if card == keyRecordA:
             print("[AUTH] Card Detected! | System switched to auth-mode.")
-            asb_fman.amend_json_obj("config.json", "m0", 3040)
+            asb_fman.amend_json_obj("config.json", "m0", "auth")
             errLvl = 31
         elif card == keyRecordB:
             print("[AUTH] Card Detected! | System switched to auth-mode.")
-            asb_fman.amend_json_obj("config.json", "m0", 3040)
+            asb_fman.amend_json_obj("config.json", "m0", "auth")
             errLvl = 31
         elif card == keyRecordC:
             print("[AUTH] Card Detected! | System switched to auth-mode.")
-            asb_fman.amend_json_obj("config.json", "m0", 3040)
+            asb_fman.amend_json_obj("config.json", "m0", "auth")
             errLvl = 31
         elif card == 0: # If no card was scanned, exit on timeout.
             print("[ASB] Reader timed out.")
@@ -159,10 +159,10 @@ def start_auth_proto():
         else: # If card is anything other than 0 or registered card, warn card is unregistered.
             print("[AUTH] Invalid Card! | Presented card is unregistered.")
             # No panic required when requesting auth-mode from standby-mode.
-    elif mode == 4003: # If in panic-mode, break before reader.init().
+    elif mode == "panic": # If in panic-mode, break before reader.init().
         print("[MODE] System panicked.")
         errLvl = 44
-    elif mode == 3040: # Auth-mode cycle limit set.
+    elif mode == "auth": # Auth-mode cycle limit set.
         cycleLimit = rTimeout
         print("[MODE] Auth-mode active, system armed. ")
         print("")
@@ -177,21 +177,21 @@ def start_auth_proto():
             print("")
             blink_sec_led(2) # Blink light twice to indicate card read.
             unlock_starter(sHangA)
-            asb_fman.amend_json_obj("config.json", "m0", 1010)
+            asb_fman.amend_json_obj("config.json", "m0", "standby")
             errLvl = 33
         elif card == keyRecordB:
             print("[AUTH] Access Granted! | Presented card matches a valid record.")
             print("")
             blink_sec_led(2)
             unlock_starter(sHangA)
-            asb_fman.amend_json_obj("config.json", "m0", 1010)
+            asb_fman.amend_json_obj("config.json", "m0", "standby")
             errLvl = 33
         elif card == keyRecordC:
             print("[AUTH] Access Granted! | Presented card matches a valid record.")
             print("")
             blink_sec_led(2)
             unlock_starter(sHangA)
-            asb_fman.amend_json_obj("config.json", "m0", 1010)
+            asb_fman.amend_json_obj("config.json", "m0", "standby")
             errLvl = 33
         elif card == 0:
             print("[ASB] Reader timed out.")
@@ -200,7 +200,7 @@ def start_auth_proto():
             print("[AUTH] Invalid Card! | Presented card is unregistered.")
             print("[AUTH] System will PANIC!")
             blink_sec_led(3)
-            asb_fman.amend_json_obj("config.json", "m0", 4003)
+            asb_fman.amend_json_obj("config.json", "m0", "panic")
             sleep(2)
             suspend_exec(True)
 
