@@ -13,6 +13,7 @@ Open source vehicle security in a box!
 - Do **not** wire in a way that prevents vehicle operation during emergencies.
 - Follow automotive electrical safety standards: Disconnect the battery before installation/testing, fuse positive lines at source with correct values, and verify wiring before reconnecting the battery.
 - This is **not tamper-proof** security; it simply dissuades potential thieves by increasing the complexity of the starter system.
+- Freezing modules in '/lib' and keys hash as bytecode in firmware greatly increases **tamper resistance!**
 - You are **solely responsible for your safety** and the functionality/warranty of your vehicle.
 - For safety purposes I have programmed ASB with a built in "standby-mode".
 - It is recommended to leave the vehicle in standby-mode during normal operation in case of engine stall so you can recover it without presenting a card.
