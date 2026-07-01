@@ -2,7 +2,7 @@
 ## Authentication and Security Functions Module for AutoSecurityBox.
 # Written for Micropython.
 
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 
 import machine
 import asb_fman # Depends on v2.0.5
@@ -10,10 +10,10 @@ import asb_crypt # Depends on v0.0.3
 from time import sleep
 from mfrc522 import MFRC522 # Wendlers Micropython MFRC522 library.
 
-## Board Pin declarations.
-relay0 = machine.Pin(15, machine.Pin.OUT)
-secLight = machine.Pin(12, machine.Pin.OUT)
-reader = MFRC522(spi_id=0,sck=18,miso=20,mosi=19,cs=2,rst=22)
+## Pin declarations.
+relay0 = machine.Pin(15, machine.Pin.OUT) # Declare starter circuit relay.
+secLight = machine.Pin(12, machine.Pin.OUT) # Declare security/status light.
+reader = MFRC522(spi_id=0,sck=18,miso=20,mosi=19,cs=2,rst=22) # Declare reader Antenna.
 
 # Program halt/suspend function.
 def suspend_exec(deepT):
@@ -24,11 +24,11 @@ def suspend_exec(deepT):
         print("[PWR] Light sleep active. Power cycle required to continue.")
         machine.lightsleep() # Lightsleep indefinitely.
         machine.reset() # Reset if lightsleep fails or on interrupt.
-    else:
+    else: # Catch exception.
         print("[PWR/WARN] An error occured in suspend().")
 
-# Security/Status light function.
-def blink_sec_led(blinks):
+# Status light function.
+def blink_sec_led(blinks): # Blinks security light to indicate exit or status code.
     ledState = secLight.value()
     if ledState == 1:
         secLight.value(0)
@@ -77,6 +77,8 @@ def unlock_starter(sHold): # Unlock starter for the specified amount of time.
     print("[AUTH] Starter will unlock in 200ms!")
     sleep(0.2)
     relay0.value(1)
+    # Moved parenthesis in v1.5.4. Old statement: str(float(sHold) * 100)
+    # New statement: str(float(sHold * 1000))
     print("[AUTH] Unlocked for " + str(float(sHold * 1000)) + "ms...")
     secLight.value(0) # Turn security light off while starter is unlocked.
     sleep(float(sHold))
@@ -159,10 +161,7 @@ def start_auth_proto():
         else: # If card is anything other than 0 or registered card, warn card is unregistered.
             print("[AUTH] Invalid Card! | Presented card is unregistered.")
             # No panic required when requesting auth-mode from standby-mode.
-    elif mode == "panic": # If in panic-mode, break before reader.init().
-        print("[MODE] System panicked.")
-        errLvl = 44
-    elif mode == "auth": # Auth-mode cycle limit set.
+    elif mode == "auth": # Auth-mode.
         cycleLimit = rTimeout
         print("[MODE] Auth-mode active, system armed. ")
         print("")
@@ -203,6 +202,9 @@ def start_auth_proto():
             asb_fman.amend_json_obj("config.json", "m0", "panic")
             sleep(2)
             suspend_exec(True)
+    elif mode == "panic": # Panic-mode.
+        print("[MODE] System panicked!")
+        errLvl = 44
 
 if __name__ == "__main__":
     print("[ASB] asb_auth.py should be frozen in firmware and imported by asb.py!")
