@@ -1,5 +1,5 @@
 # asb.py
-## AutoSecurityBox Initialization and Termination Module.
+## AutoSecurityBox Initialization, Termination, and Error Handling Module.
 # Written for Micropython on RP2040/Pico 2020/Arduino, by Zagarak.
 
 __version__ = "1.8.0"
