@@ -1,80 +1,79 @@
 # asb_fman.py
-## File Manipulation and Memory Reporting Module
-# For AutoSecurityBox on Micropython.
+## File Manipulation and Memory Reporting Module for AutoSecurityBox.
+# Written for Micropython.
 
-__version__ = "2.0.3"
+__version__ = "2.0.5"
 
 import os
 import gc
 import ujson
 
-def touchFile(fName, content):
+## Basic File Manipulation.
+# Create a new file.
+def touch_file(fName, content):
     try:
         file = open(str(fName), "w")
     except OSError:
-        print("[FRW/CRIT] An error occured of type OSError in touchFile(open).")
+        print("[FMAN/CRIT] An error occured of type OSError in touch_file(open).")
     except TypeError:
-        print("[FRW/WARN] An error occured of type TypeError in touchFile(str(fName)).")
-    else: # Success block
+        print("[FMAN/WARN] An error occured of type TypeError in touch_file(open).")
+    else: # Success block.
         file.write(content)
         file.flush()
-        print("[FRW] File '/" + str(fName) + "' created succesfully.")
+        print("[FMAN] File '/" + str(fName) + "' created succesfully.")
     file.close()
 
 # Overwrite an existing file.
-def owriteFile(fName, content):
+def o_write_file(fName, content):
     try:
         file = open(str(fName), "r")
         data = file.read()
-    except OSError: # if file does not exist
-        print("[FRW/WARN] An error occured of type OSError in owriteFile(open).")
-        print("[FRW/WARN] '/"+ str(fName) + "' | No such file or directory.")
-    except TypeError: # if typeerror occurs
-        print("[FRW/WARN] A TypeError exception occured in owriteFile(str(fName)).")
-    else: # Success block. File exists
+    except OSError: # If file does not exist.
+        print("[FMAN/WARN] An error occured of type OSError in o_write_file(open).")
+        print("[FMAN/WARN] '/"+ str(fName) + "' | No such file or directory.")
+    except TypeError:
+        print("[FMAN/WARN] An error occured of type TypeError in o_write_file(open).")
+    else:
         os.remove(str(fName))
         file = open(str(fName), "w")
         file.write(content)
         file.flush()
-        print("[FRW] File contents overwritten.")
+        print("[FMAN] File contents overwritten.")
     file.close()
 
 # Remove an existing file.
-def removeFile(fName):
+def rm_file(fName):
     try:
         os.remove(str(fName))
-    except TypeError: # if type doesnt match str
-        print("[FRW/WARN] A TypeError exception occured in os.remove(str(fName)).")
-    else: # Success block.
-        # Removed file successfully.
-        print("[FRW] Removed file '/" + str(fName) + "' successfully")
+    except TypeError: # If type doesnt match str.
+        print("[FMAN/WARN] An error occured of type TypeError in rm_file().")
+    else:
+        print("[FMAN] Removed file '/" + str(fName) + "' successfully")
 
-# Read an existing file.
-def readFile(fName, lookup):
+# Read the contents of an existing file.
+def read_file(fName, lookup):
     try:
         file = open(str(fName), "r")
         data = file.read()
     except OSError: # if file doesnt exist.
-        print("[FRW/WARN] readFile(" + str(fName) + ") operation failed.")
-        print("[FRW/WARN] '/"+ str(fName) + "' | No such file or directory.")
+        print("[FMAN/WARN] An error occured of type OSError in read_file(open).")
+        print("[FMAN/WARN] '/"+ str(fName) + "' | No such file or directory.")
         exists = False
         return exists
-    else: # Success block.
+    else:
         if lookup == True:
             exists = True
             return exists
         elif lookup == False:
-            print("[FRW] File loaded.")
+            print("[FMAN] File loaded.")
             return str(data)
         else:
-            print("[FRW/WARN] Error in fileRW.readFile(lookup). Bad value or TypeError.")
+            print("[FMAN/WARN] An error occured of type TypeError in read_file().")
     file.close()
 
 ## JSON File Manipulation.
-
-# Create JSON conforming to machine setup requirements.
-# Check main.py and ensure new additions are included there.
-def setupCFG(fname, modeA, dUlSleep, aUlSleep, rsleep, rtimeout):
+# Create JSON conforming to ASB setup requirements.
+def gen_config(fname, modeA, dUlSleep, aUlSleep, rsleep, rtimeout):
     try:
         data = {
             "m0": modeA,
@@ -86,11 +85,11 @@ def setupCFG(fname, modeA, dUlSleep, aUlSleep, rsleep, rtimeout):
         with open(str(fname), "w") as file:
             file.write(ujson.dumps(data))
     except OSError:
-        print("[FRW/WARN] OSError in fileRW.setupJSON.")
-    else: # Success block.
-        print("[FRW] JSON created successfully.")
+        print("[FMAN/WARN] An error occured of type OSError in gen_config().")
+    else:
+        print("[FMAN] CONFIG generated successfully.")
 
-def setupKF(fname, keyA, keyB, keyC):
+def gen_keys(fname, keyA, keyB, keyC):
     try:
         data = {
             "k0": keyA,
@@ -100,55 +99,74 @@ def setupKF(fname, keyA, keyB, keyC):
         with open(str(fname), "w") as file:
             file.write(ujson.dumps(data))
     except OSError:
-        print("[FRW/WARN] OSError in fileRW.setupKF.")
-    else: # Success block.
-        print("[FRW] JSON created successfully.")
+        print("[FMAN/WARN] An error occured of type OSError in gen_keys().")
+    else:
+        print("[FMAN] KEYS generated successfully.")
 
 # Retrieve a single entry in JSON.
-def readJSON(fname, reqVar):
+def load_json_obj(fname, reqVar):
     try:
         with open(str(fname), "r") as file:
             raw = file.read()
     except OSError:
-        print("[FRW/WARN] OSError in fileRW.readJSON.")
-    else: # Success block.
+        print("[FMAN/WARN] An error occured of type OSError in load_json_obj().")
+    else:
         data = ujson.loads(raw)
         retVar = data[reqVar]
         return retVar
 
 # Edit a single entry in JSON.
-def amendJSON(fname, reqVar, newValue):
+def amend_json_obj(fname, reqVar, newValue):
     try:
         with open(str(fname), "r") as file:
             data = ujson.load(file)
     except OSError:
-        print("[FRW/WARN] OSError in fileRW.amendJSON(read).")
-    else: # Success block.
+        print("[FMAN/WARN] An error occured of type OSError in amend_json_obj(load).")
+    else:
         data[reqVar] = newValue
     try:
         with open(str(fname), "w") as file:
             file.write(ujson.dumps(data)) 
     except OSError:
-        print("[FRW/WARN] OSError in fileRW.amendJSON(write).")
-    else: # Success block.
-        print("[FRW] JSON amended.")
+        print("[FMAN/WARN] An error occured of type OSError in amend_json_obj(load).")
+    else:
+        print("[FMAN] JSON amended.")
 
-## Filesystem information requests.
+## Memory Reporting.
+# Get heap free ram.
+def get_heap_fram():
+    try:
+        gc.collect()
+        fMem = gc.mem_free()
+        cMem = fMem / 1024
+        fOut = str(fMem) + " bytes (" + str(cMem) + ") KB free."
+    except OSError:
+        print("[FMAN/WARN] An error occured of type OSError in get_heap_fram().")
+    except TypeError:
+        print("[FMAN/WARN] An error occured of type TypeError in get_heap_fram().")
+    except MemoryError:
+        print("[FMAN/WARN] An error occured of type MemoryError in get_heap_fram().")
+    else:
+        return fOut
 
-# Output free memory stats to debug console.
-def getRAM(): # Get heap free RAM.
-    gc.collect() # Run a garbage collect.
-    fMem = gc.mem_free() # Get available heap RAM in bytes as int(fMem).
-    cMem = fMem / 1024 # Divide to get kilobytes.
-    fOut = str(fMem) + " bytes (" + str(cMem) + ") KB free."
-    return fOut
-def getNOR(): # Get board free flash.
-    sFs = os.statvfs('/')
-    bSize = sFs[0]
-    bFree = sFs[3]
-    fBytes = bSize * bFree
-    kBytes = fBytes / 1000
-    bOut = str(fBytes) + " bytes (" + str(kBytes) + ") KB free."
-    return bOut
+# Get NOR free bytes.
+def get_nor_fbytes():
+    try:
+        sFs = os.statvfs('/')
+        bSize = sFs[0]
+        bFree = sFs[3]
+        fBytes = bSize * bFree
+        kBytes = fBytes / 1000
+        bOut = str(fBytes) + " bytes (" + str(kBytes) + ") KB free."
+    except OSError:
+        print("[FMAN/WARN] An error occured of type OSError in get_nor_fbytes().")
+    except TypeError:
+        print("[FMAN/WARN] An error occured of type TypeError in get_heap_fram().")
+    except MemoryError:
+        print("[FMAN/WARN] An error occured of type MemoryError in get_nor_fbytes().")
+    else:
+        return bOut
 
+if __name__ == "__main__":
+    print("[ASB] asb_fman.py should be frozen in firmware and imported by asb_auth.py!")
 ## EOF
