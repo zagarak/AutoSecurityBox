@@ -11,9 +11,9 @@ from time import sleep
 from mfrc522 import MFRC522 # Wendlers Micropython MFRC522 library.
 
 ## Pin declarations.
-relay0 = machine.Pin(15, machine.Pin.OUT) # Declare starter circuit relay.
-secLight = machine.Pin(12, machine.Pin.OUT) # Declare security/status light.
-reader = MFRC522(spi_id=0,sck=18,miso=20,mosi=19,cs=2,rst=22) # Declare reader Antenna.
+relay0 = machine.Pin(15, machine.Pin.OUT)
+secLight = machine.Pin(12, machine.Pin.OUT)
+reader = MFRC522(spi_id=0,sck=18,miso=20,mosi=19,cs=2,rst=22)
 
 # Program halt/suspend function.
 def suspend_exec(deepT):
@@ -24,11 +24,11 @@ def suspend_exec(deepT):
         print("[PWR] Light sleep active. Power cycle required to continue.")
         machine.lightsleep() # Lightsleep indefinitely.
         machine.reset() # Reset if lightsleep fails or on interrupt.
-    else: # Catch exception.
+    else:
         print("[PWR/WARN] An error occured in suspend().")
 
 # Status light function.
-def blink_sec_led(blinks): # Blinks security light to indicate exit or status code.
+def blink_sec_led(blinks):
     ledState = secLight.value()
     if ledState == 1:
         secLight.value(0)
@@ -118,7 +118,7 @@ def poll_reader(cycles):
                 break
             else: # Card unreadable or absent while resolving uid.
                 print("[RDR] Read Error! | Presented card is unreadable or was removed before read completed.")
-        else: # No card detected or no reader state change. ptick goes here.
+        else: # No card detected or no reader state change.
             print("[RDR] No card detected during this cycle. | Cycle: (" + str(tick) + "/" + str(cycleLimit) + ")")
 
 # Handle Authorization Function.
@@ -160,7 +160,6 @@ def start_auth_proto():
             errLvl = 22
         else: # If card is anything other than 0 or registered card, warn card is unregistered.
             print("[AUTH] Invalid Card! | Presented card is unregistered.")
-            # No panic required when requesting auth-mode from standby-mode.
     elif mode == "auth": # Auth-mode.
         cycleLimit = rTimeout
         print("[MODE] Auth-mode active, system armed. ")
