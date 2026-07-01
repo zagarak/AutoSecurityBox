@@ -2,11 +2,11 @@
 ## Authentication and Security Functions Module for AutoSecurityBox.
 # Written for Micropython.
 
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 
 import machine
-import asb_fman # Depends on v2.0.5
-import asb_crypt # Depends on v0.0.3
+import asb_fman # Depends on v2.0.6
+import asb_crypt # Depends on v0.0.4
 from time import sleep
 from mfrc522 import MFRC522 # Wendlers Micropython MFRC522 library.
 
@@ -25,7 +25,7 @@ def suspend_exec(deepT):
         machine.lightsleep() # Lightsleep indefinitely.
         machine.reset() # Reset if lightsleep fails or on interrupt.
     else: # Catch exception.
-        print("[PWR/WARN] An error occured in suspend().")
+        print("[WARN] An error occured in suspend().")
 
 # Status light function.
 def blink_sec_led(blinks): # Blinks security light to indicate exit or status code.
@@ -94,30 +94,30 @@ def poll_reader(cycles):
     tick = 0
     for i in range(cycles):
         reader.init()
-        print("[ASB] Reader initialised succesfully.")
+        print("[AUTH] Reader initialised succesfully.")
         print("")
         (stat, tag_type) = reader.request(reader.REQIDL)
         sleep(float(rSleep))
         tick += 1
         if stat == reader.OK:
-            print("[RDR] Card detected! Attempting read, please wait...")
+            print("[AUTH] Card detected! Attempting read, please wait...")
             (stat, uid) = reader.SelectTagSN()
             if stat == reader.OK:
                 cuid = int.from_bytes(bytes(uid), "little", False)
                 card = asb_crypt.cnv_uid(str(cuid))
-                print("[RDR] Card read successfully.")
+                print("[AUTH] Card read successfully.")
                 print("")
-                print("[RDR] =======================")
-                print("[RDR]   SCAN RESULTS")
-                print("[RDR] -----------------------")
-                print("[RDR]   CARD UID: " + str(cuid))
-                print("[RDR] =======================")
+                print("[AUTH] =======================")
+                print("[AUTH]   SCAN RESULTS")
+                print("[AUTH] -----------------------")
+                print("[AUTH]   CARD UID: " + str(cuid))
+                print("[AUTH] =======================")
                 print("")
                 break
             else: # Card unreadable or absent while resolving uid.
-                print("[RDR] Read Error! | Presented card is unreadable or was removed before read completed.")
+                print("[WARN] Read Error! | Presented card is unreadable or was removed before read completed.")
         else: # No card detected or no reader state change. ptick goes here.
-            print("[RDR] No card detected during this cycle. | Cycle: (" + str(tick) + "/" + str(cycleLimit) + ")")
+            print("[WARN] No card detected during this cycle. | Cycle: (" + str(tick) + "/" + str(cycleLimit) + ")")
 
 # Handle Authorization Function.
 def start_auth_proto():
@@ -154,7 +154,7 @@ def start_auth_proto():
             asb_fman.amend_json_obj("config.json", "m0", "auth")
             errLvl = 31
         elif card == 0: # If no card was scanned, exit on timeout.
-            print("[ASB] Reader timed out.")
+            print("[WARN] Reader timed out.")
             errLvl = 22
         else: # If card is anything other than 0 or registered card, warn card is unregistered.
             print("[AUTH] Invalid Card! | Presented card is unregistered.")
