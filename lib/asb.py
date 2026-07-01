@@ -3,10 +3,10 @@
 # Written for Micropython on RP2040/Pico 2020/Arduino, by Zagarak.
 
 # This version number also corresponds to project version number.
-__version__ = "1.8.1"
+__version__ = "1.8.2"
 
 import sys
-import asb_auth # Depends on v0.0.5
+import asb_auth # Depends on v0.0.6
 from time import sleep
 
 if __name__ == "asb":
@@ -17,7 +17,7 @@ if __name__ == "asb":
         asb_auth.start_auth_proto()
         sleep(0.1)
     except:
-        print("[CRIT] An exception or KeyboardInterrupt has occured!")
+        print("[WARN] An exception or KeyboardInterrupt has occured!")
     finally:
         if asb_auth.errLvl == 31: # Auth-mode-activated termination point.
             print("[ASB] Program halted on 'auth-mode-activated'.")
