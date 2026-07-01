@@ -2,7 +2,7 @@
 ## File Manipulation and Memory Reporting Module for AutoSecurityBox.
 # Written for Micropython.
 
-__version__ = "2.0.5"
+__version__ = "2.0.6"
 
 import os
 import gc
@@ -14,9 +14,9 @@ def touch_file(fName, content):
     try:
         file = open(str(fName), "w")
     except OSError:
-        print("[FMAN/CRIT] An error occured of type OSError in touch_file(open).")
+        print("[CRIT] An error occured of type OSError in touch_file(open).")
     except TypeError:
-        print("[FMAN/WARN] An error occured of type TypeError in touch_file(open).")
+        print("[WARN] An error occured of type TypeError in touch_file(open).")
     else: # Success block.
         file.write(content)
         file.flush()
@@ -29,10 +29,10 @@ def o_write_file(fName, content):
         file = open(str(fName), "r")
         data = file.read()
     except OSError: # If file does not exist.
-        print("[FMAN/WARN] An error occured of type OSError in o_write_file(open).")
-        print("[FMAN/WARN] '/"+ str(fName) + "' | No such file or directory.")
+        print("[WARN] An error occured of type OSError in o_write_file(open).")
+        print("[WARN] '/"+ str(fName) + "' | No such file or directory.")
     except TypeError:
-        print("[FMAN/WARN] An error occured of type TypeError in o_write_file(open).")
+        print("[WARN] An error occured of type TypeError in o_write_file(open).")
     else:
         os.remove(str(fName))
         file = open(str(fName), "w")
@@ -46,7 +46,7 @@ def rm_file(fName):
     try:
         os.remove(str(fName))
     except TypeError: # If type doesnt match str.
-        print("[FMAN/WARN] An error occured of type TypeError in rm_file().")
+        print("[WARN] An error occured of type TypeError in rm_file().")
     else:
         print("[FMAN] Removed file '/" + str(fName) + "' successfully")
 
@@ -56,8 +56,8 @@ def read_file(fName, lookup):
         file = open(str(fName), "r")
         data = file.read()
     except OSError: # if file doesnt exist.
-        print("[FMAN/WARN] An error occured of type OSError in read_file(open).")
-        print("[FMAN/WARN] '/"+ str(fName) + "' | No such file or directory.")
+        print("[WARN] An error occured of type OSError in read_file(open).")
+        print("[WARN] '/"+ str(fName) + "' | No such file or directory.")
         exists = False
         return exists
     else:
@@ -68,7 +68,7 @@ def read_file(fName, lookup):
             print("[FMAN] File loaded.")
             return str(data)
         else:
-            print("[FMAN/WARN] An error occured of type TypeError in read_file().")
+            print("[WARN] An error occured of type TypeError in read_file().")
     file.close()
 
 ## JSON File Manipulation.
@@ -85,7 +85,7 @@ def gen_config(fname, modeA, dUlSleep, aUlSleep, rsleep, rtimeout):
         with open(str(fname), "w") as file:
             file.write(ujson.dumps(data))
     except OSError:
-        print("[FMAN/WARN] An error occured of type OSError in gen_config().")
+        print("[WARN] An error occured of type OSError in gen_config().")
     else:
         print("[FMAN] CONFIG generated successfully.")
 
@@ -99,7 +99,7 @@ def gen_keys(fname, keyA, keyB, keyC):
         with open(str(fname), "w") as file:
             file.write(ujson.dumps(data))
     except OSError:
-        print("[FMAN/WARN] An error occured of type OSError in gen_keys().")
+        print("[WARN] An error occured of type OSError in gen_keys().")
     else:
         print("[FMAN] KEYS generated successfully.")
 
@@ -109,7 +109,7 @@ def load_json_obj(fname, reqVar):
         with open(str(fname), "r") as file:
             raw = file.read()
     except OSError:
-        print("[FMAN/WARN] An error occured of type OSError in load_json_obj().")
+        print("[WARN] An error occured of type OSError in load_json_obj().")
     else:
         data = ujson.loads(raw)
         retVar = data[reqVar]
@@ -121,14 +121,14 @@ def amend_json_obj(fname, reqVar, newValue):
         with open(str(fname), "r") as file:
             data = ujson.load(file)
     except OSError:
-        print("[FMAN/WARN] An error occured of type OSError in amend_json_obj(load).")
+        print("[WARN] An error occured of type OSError in amend_json_obj(load).")
     else:
         data[reqVar] = newValue
     try:
         with open(str(fname), "w") as file:
             file.write(ujson.dumps(data)) 
     except OSError:
-        print("[FMAN/WARN] An error occured of type OSError in amend_json_obj(load).")
+        print("[WARN] An error occured of type OSError in amend_json_obj(load).")
     else:
         print("[FMAN] JSON amended.")
 
@@ -141,11 +141,11 @@ def get_heap_fram():
         cMem = fMem / 1024
         fOut = str(fMem) + " bytes (" + str(cMem) + ") KB free."
     except OSError:
-        print("[FMAN/WARN] An error occured of type OSError in get_heap_fram().")
+        print("[WARN] An error occured of type OSError in get_heap_fram().")
     except TypeError:
-        print("[FMAN/WARN] An error occured of type TypeError in get_heap_fram().")
+        print("[WARN] An error occured of type TypeError in get_heap_fram().")
     except MemoryError:
-        print("[FMAN/WARN] An error occured of type MemoryError in get_heap_fram().")
+        print("[WARN] An error occured of type MemoryError in get_heap_fram().")
     else:
         return fOut
 
@@ -159,11 +159,11 @@ def get_nor_fbytes():
         kBytes = fBytes / 1000
         bOut = str(fBytes) + " bytes (" + str(kBytes) + ") KB free."
     except OSError:
-        print("[FMAN/WARN] An error occured of type OSError in get_nor_fbytes().")
+        print("[WARN] An error occured of type OSError in get_nor_fbytes().")
     except TypeError:
-        print("[FMAN/WARN] An error occured of type TypeError in get_heap_fram().")
+        print("[WARN] An error occured of type TypeError in get_heap_fram().")
     except MemoryError:
-        print("[FMAN/WARN] An error occured of type MemoryError in get_nor_fbytes().")
+        print("[WARN] An error occured of type MemoryError in get_nor_fbytes().")
     else:
         return bOut
 
