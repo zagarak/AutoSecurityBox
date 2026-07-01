@@ -2,7 +2,7 @@
 ## SHA256 Hashing and Key Integrity Management Module for AutoSecurityBox.
 # Written for Micropython.
 
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 
 import machine
 import hashlib
@@ -17,7 +17,7 @@ def cnv_uid(vIn):
         raw = hEnc.digest()
         hOut = binascii.hexlify(raw).decode()
     except OSError:
-        print("[HSH] OSError in cnv_uid().")
+        print("[WARN] OSError in cnv_uid().")
     else:
         return str(hOut)
 
@@ -32,14 +32,13 @@ def rtn_f_hsh(path, chunk_size=512):
                     break
                 h.update(data)
     except OSError:
-        print("[HSH] OSError in rtn_f_hsh().")
+        print("[WARN] OSError in rtn_f_hsh().")
     else:
         return ''.join('{:02x}'.format(b) for b in h.digest())
 
 ## Internal keys.json SHA256 hash (lowercase hex).
 # ----------------------------------------------------------------
 def rtn_hw_hsh():
-    # Put your keys.json file hash here.
     kh = "HASH3"
     return kh
 # ----------------------------------------------------------------
@@ -51,13 +50,13 @@ if __name__ == "asb_crypt":
         file = open(str("/keys.json"), "r")
         data = file.read()
     except OSError: # If file doesn't exist.
-        print("[KMS] No stored keys!")
+        print("[CRYPT] No stored keys!")
     else:
-        print("[KMS] Verifying key integrity...")
+        print("[CRYPT] Verifying key integrity...")
         if rtn_f_hsh("/keys.json") == rtn_hw_hsh():
-            print("[MEM/OK] System passed integrity check!")
+            print("[CRIT] Passed integrity check!")
         else:
-            print("[MEM/CRIT] Integrity check failed!")
+            print("[CRIT] Integrity check failed!")
             sleep(5)
             machine.reset()
 
