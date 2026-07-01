@@ -1,5 +1,8 @@
-# main.py
-# Load ASB by importing it from firmware or lib.
+## main.py
+## Load ASB without exposing sensitive code.
+# Written for Micropython.
+
+__version__ = "0.0.1"
 
 def load_asb():
     print("Loading AutoSecurityBox...")
