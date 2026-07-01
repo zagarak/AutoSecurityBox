@@ -5,7 +5,7 @@
 __version__ = "1.8.0"
 
 import sys
-import asb_auth # Depends on v0.0.2
+import asb_auth # Depends on v0.0.3
 from time import sleep
 
 if __name__ == "asb":
