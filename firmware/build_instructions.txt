@@ -10,13 +10,8 @@
 # Add all custom modules to modules directory and include all modules in that directory in manifest.
 
 # minimal manifest.py
-module("_boot.py")
-module("_boot_fat.py")
-module("rp2.py")
-module("mfrc522.py")
-module("asb.py")
-module("asb_fman.py")
-module("asb_hasher.py")
+  module("example_module.py")
+# See firmware/port/rp2/manifest.py for full manifest.
 # End of manifest.
 
 # Do not forget to include _boot, _boot_fat, and rp2 or you will not have filesystem access once flashed!
