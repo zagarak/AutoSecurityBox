@@ -1,5 +1,5 @@
 # AutoSecurityBox
-**~Readme under construction!~**
+**Readme under construction!**
 <br />
 <br />
 Open source vehicle security in a box!
