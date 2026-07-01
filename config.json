@@ -1,13 +1,1 @@
-{
-  "_COMMENTS":"Comments"
-  "_C0":"This is an example configuration for reference only.",
-  "_C1":"Allow main.py to generate its own config.json on first run.",
-  "_C2":"m0 - mode (auth-mode, standby-mode, panic-mode) as int.",
-  "_C3":"arm_sleep - armed starter-circuit-closed-hangtime as int.",
-  "_C4":"disarm_sleep - disarmed starter-circuit-closed-hangtime as int."
-  "_C5":"reader_sleep - reader-cycle-sleep as float."
-  "_C6":"reader_timeout - reader-total-cycles as int."
-  "_END":"End of comments."
-}
-
 {"m0": "standby", "arm_sleep": 11, "disarm_sleep": 7, "reader_sleep": 1.2, "reader_timeout": 12}
