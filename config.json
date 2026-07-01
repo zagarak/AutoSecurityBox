@@ -10,4 +10,4 @@
   "_END":"End of comments."
 }
 
-{"m0": 3040, "arm_sleep": 11, "disarm_sleep": 7, "reader_sleep": 1.2, "reader_timeout": 12}
+{"m0": "standby", "arm_sleep": 11, "disarm_sleep": 7, "reader_sleep": 1.2, "reader_timeout": 12}
