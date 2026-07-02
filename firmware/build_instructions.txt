@@ -19,13 +19,12 @@
 # For secure 'keys.json' hash storage, asb_hasher needs to be frozen in firmware. It will work if included in /lib
 # but the stored hash will be exposed and writable.
 
-# Edit version tag (if desired), add modules, commit changes, make submodules, clean build directory, and build with frozen modules.
-  NEWTAG="v1.29.0-preview-custom"
-  git tag -f "$NEWTAG" HEAD
-  git commit -m "Custom version/banner changes"
+# Add modules, commit changes, create tag, make submodules, clean build directory, and build with frozen modules.
   git status
   git add -A
   git commit
+  NEWTAG="v1.29.0-preview-custom"
+  git tag -f "$NEWTAG" HEAD
   make BOARD=RPI_PICO submodules
   make BOARD=RPI_PICO MANIFEST=manifest.py clean
   make BOARD=RPI_PICO MANIFEST=manifest.py
