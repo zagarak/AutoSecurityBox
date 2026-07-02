@@ -39,11 +39,11 @@ The goal of this project is to provide security for parked vehicles that lack na
 - Auth Mode/Armed
  
 ### Operating objective
-> By default ``config.json`` is generated with the mode (data key m0) set to standby (int 1010). When ``asb.py`` runs it checks this data key and if in standby mode, it closes the starter relay for a duration in seconds equal to the value of the data key ``disarm_sleep``. Then it opens the relay and initializes the reader for a duration of ``reader_sleep`` x ``ptickMax`` seconds to allow the user to arm the system. Finally it exits, and if a valid card was scanned, overwrites data key ``m0`` with the value ``3040``.
+> By default ``config.json`` is generated with the mode (data key m0) set to standby (int 1010). When ``asb.py`` runs it checks this data key and if in standby mode, it closes the starter relay for a duration in seconds equal to the value of the data key ``disarm_sleep``. Then it opens the relay and initializes the reader for a duration of ``reader_sleep`` x ``ptickMax`` seconds to allow the user to arm the system. Finally it exits, and if a valid card was scanned, overwrites data key ``m0`` with the string ``"auth"``.
 
 > When ``asb.py`` runs it checks this data key and if in auth/armed mode, initializes the reader for a duration equal to the value of the data key ``reader_sleep`` x ``ptickMax`` seconds. If a valid card is scanned during this time, the system will close the starter relay for ``arm_sleep`` seconds, disarm and exit on "system-disarmed" and on the next power cycle it will return to standby-mode operation. If no card is scanned, it will exit on "routine-timeout".
 
-> For added security: If three read attempts are made with an invalid card, it overwrites the data key ``m0`` with the value ``4003`` and then resets the board. This puts the program into a tertiary mode that will refuse to initialize the reader or actuate the starter relay; Instead exiting on "system-panic" until ``m0`` is updated to either ``3040`` or ``1010``.
+> For added security: If three read attempts are made with an invalid card, it overwrites the data key ``m0`` with the string ``"panic"`` and then resets the board. This puts the program into a tertiary mode that will refuse to initialize the reader or actuate the starter relay; Instead exiting on "system-panic" until ``m0`` is updated to either ``"auth"`` or ``"standby"``.
 
 ## Additional Notes
 **I've implemented rudimentary support for SHA256 hashing of scanned card UIDs, stored UIDs, and the keyfile. You will have to manually hash your UIDs before inputting them into keys.json. Then hash keys.json and input it into asb_hasher. For best security, hash your keys file and then include its hash in asb_hasher before building Micropython.**
