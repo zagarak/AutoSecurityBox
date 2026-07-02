@@ -53,5 +53,3 @@ The goal of this project is to provide security for parked vehicles that lack na
 > Mode values are arbitrary and may be changed by the end user so long as each corresponding reference in ``asb.py`` is also changed to match its partner. They exist solely to act as a magic number so that the Microcontroller can track state changes between power cycles without a backup battery.
 
 > You may notice a diode on ``5v+_Vsys`` in ``schema.png``. I added it between the supply and the microcontroller to isolate the converter output from the debug cable's ``5v+`` to prevent backfeeding of the buck converter during programming.
-
-***This project could be adapted for restricted-access doors and access panels.**
