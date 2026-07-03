@@ -3,11 +3,12 @@
 # Written for Micropython on RP2040/Pico 2020/Arduino, by Zagarak.
 
 # This version number also corresponds to project version number.
-__version__ = "1.8.2"
+__version__ = "1.8.3"
 
 import sys
-import asb_auth # Depends on v0.0.6
+import asb_auth # Depends on v0.0.7
 from time import sleep
+from asb_fman import suspend_exec
 
 if __name__ == "asb":
     asb_auth.check_config()
@@ -47,7 +48,7 @@ if __name__ == "asb":
             asb_auth.blink_sec_led(3)
         print("[ASB] Exited with code: " + str(asb_auth.errLvl))
         sleep(0.1)
-        asb_auth.suspend_exec(True)
+        suspend_exec(True)
         sys.exit()
         
 if __name__ == "__main__":
