@@ -2,11 +2,11 @@
 ## Authentication and Security Functions Module for AutoSecurityBox.
 # Written for Micropython.
 
-__version__ = "0.0.6"
+__version__ = "0.0.7"
 
 import machine
-import asb_fman # Depends on v2.0.6
-import asb_crypt # Depends on v0.0.4
+import asb_fman # Depends on v2.0.7
+import asb_crypt # Depends on v0.0.5
 from time import sleep
 from mfrc522 import MFRC522 # Wendlers Micropython MFRC522 library.
 
@@ -14,18 +14,6 @@ from mfrc522 import MFRC522 # Wendlers Micropython MFRC522 library.
 relay0 = machine.Pin(15, machine.Pin.OUT) # Declare starter circuit relay.
 secLight = machine.Pin(12, machine.Pin.OUT) # Declare security/status light.
 reader = MFRC522(spi_id=0,sck=18,miso=20,mosi=19,cs=2,rst=22) # Declare reader Antenna.
-
-# Program halt/suspend function.
-def suspend_exec(deepT):
-    if deepT == True:
-        print("[PWR] Deep sleep active. Power cycle required to continue.")
-        machine.deepsleep() # Deep sleep indefinitely.
-    elif deepT == False:
-        print("[PWR] Light sleep active. Power cycle required to continue.")
-        machine.lightsleep() # Lightsleep indefinitely.
-        machine.reset() # Reset if lightsleep fails or on interrupt.
-    else: # Catch exception.
-        print("[WARN] An error occured in suspend().")
 
 # Status light function.
 def blink_sec_led(blinks): # Blinks security light to indicate exit or status code.
@@ -47,7 +35,7 @@ def check_config():
         # Default setup values. Adjust in config.json after generation.
         asb_fman.gen_config("config.json", "standby", 11, 7, 1.2, 12)
         sleep(1)
-        machine.reset()
+        asb_fman.reboot(False)
     else:
         global mode
         global sHangA
@@ -63,7 +51,7 @@ def check_config():
         print("[MEM] Generating default keys...")
         asb_fman.gen_keys("keys.json", "k0", "k1", "k2")
         sleep(1)
-        machine.reset()
+        asb_fman.reboot(False)
     else:
         global keyRecordA
         global keyRecordB
@@ -110,7 +98,7 @@ def poll_reader(cycles):
                 print("[AUTH] =======================")
                 print("[AUTH]   SCAN RESULTS")
                 print("[AUTH] -----------------------")
-                print("[AUTH]   CARD UID: " + str(cuid))
+                print("[AUTH]   CARD UID: " + str(card))
                 print("[AUTH] =======================")
                 print("")
                 break
@@ -198,7 +186,7 @@ def start_auth_proto():
             blink_sec_led(3)
             asb_fman.amend_json_obj("config.json", "m0", "panic")
             sleep(2)
-            suspend_exec(True)
+            asb_fman.suspend_exec(True)
     elif mode == "panic": # Panic-mode.
         print("[MODE] System panicked!")
         errLvl = 44
