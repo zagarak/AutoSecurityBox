@@ -2,11 +2,12 @@
 ## File Manipulation and Memory Reporting Module for AutoSecurityBox.
 # Written for Micropython.
 
-__version__ = "2.0.6"
+__version__ = "2.0.7"
 
 import os
 import gc
 import ujson
+import machine
 
 ## Basic File Manipulation.
 # Create a new file.
@@ -166,6 +167,29 @@ def get_nor_fbytes():
         print("[WARN] An error occured of type MemoryError in get_nor_fbytes().")
     else:
         return bOut
+
+## Power Management
+# Suspend execution and reduce power
+def suspend_exec(deepT):
+    if deepT == True:
+        print("[FMAN] Deep sleep active. Power cycle required to continue.")
+        machine.deepsleep() # Deep sleep indefinitely.
+    elif deepT == False:
+        print("[FMAN] Light sleep active. Power cycle required to continue.")
+        machine.lightsleep() # Lightsleep indefinitely.
+        machine.reset() # Reset if lightsleep fails or on interrupt.
+    else: # Catch exception.
+        print("[WARN] An error occured in suspend().")
+
+def reboot(dfu):
+    if dfu == False:
+        print("[FMAN] Rebooting, please wait...")
+        machine.reset()
+    elif dfu == True: # If requesting dfu, reboot to bootloader.
+        print("[FMAN] Entering DFU mode, please wait...")
+        machine.bootloader()
+    else:
+        print("[WARN] Invalid argument for reboot().")
 
 if __name__ == "__main__":
     print("[ASB] asb_fman.py should be frozen in firmware and imported by asb_auth.py!")
