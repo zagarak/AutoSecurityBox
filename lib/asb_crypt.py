@@ -2,7 +2,7 @@
 ## SHA256 Hashing and Key Integrity Management Module for AutoSecurityBox.
 # Written for Micropython.
 
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 
 import machine
 import hashlib
@@ -54,7 +54,7 @@ if __name__ == "asb_crypt":
     else:
         print("[CRYPT] Verifying key integrity...")
         if rtn_f_hsh("/keys.json") == rtn_hw_hsh():
-            print("[CRIT] Passed integrity check!")
+            print("[CRYPT] Passed integrity check!")
         else:
             print("[CRIT] Integrity check failed!")
             sleep(5)
