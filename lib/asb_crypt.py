@@ -33,6 +33,8 @@ def rtn_f_hsh(path, chunk_size=512):
                 h.update(data)
     except OSError:
         print("[WARN] OSError in rtn_f_hsh().")
+    except TypeError:
+        print("[WARN] Argument error! Syntax: rtn_f_hsh(path, chunk_size=512).")
     else:
         return ''.join('{:02x}'.format(b) for b in h.digest())
 
