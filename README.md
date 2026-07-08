@@ -46,7 +46,7 @@ The goal of this project is to provide security for parked vehicles that lack na
 > For added security: If three read attempts are made with an invalid card, it overwrites the data key ``m0`` with the string ``"panic"`` and then resets the board. This puts the program into a tertiary mode that will refuse to initialize the reader or actuate the starter relay; Instead exiting on "system-panic" until ``m0`` is updated to either ``"auth"`` or ``"standby"``.
 
 ## Additional Notes
-**I've implemented rudimentary support for SHA256 hashing of scanned card UIDs, stored UIDs, and the keyfile. You will have to manually hash your UIDs before inputting them into keys.json. Then hash keys.json and input it into asb_hasher. For best security, hash your keys file and then include its hash in asb_hasher before building Micropython.**
+**I've implemented rudimentary support for SHA256 hashing of scanned card UIDs, stored UIDs, and the keyfile. You will have to manually hash your UIDs before inputting them into keys.json. Then hash keys.json and input it into ``asb_crypt.py``. For best security, hash your keys file and then include its hash in asb_hasher before building Micropython.**
 
 > The goal of this project is not government quality security. Instead, the hope is to increase the difficulty, time, and technical requirements for a potential thief to get away with the vehicle. In the future I plan to also control the fuel pump or ignition system. Though, this would require the board and relays to remain powered during operation of the vehicle.
 
