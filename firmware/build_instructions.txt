@@ -15,8 +15,8 @@
 # End of manifest.
 
 # Do not forget to include _boot, _boot_fat, and rp2 or you will not have filesystem access once flashed!
-# Inclusion of asb, asb_fman, and mfrc522 are optional but any excluded modules must be present in /lib on board fs.
-# For 'keys.json' integrity assurance asb_crypt needs to be frozen in firmware. It will work if included in /lib
+# Inclusion of asb, asb_fman, asb_auth, and mfrc522 are optional but any excluded modules must be present in /lib on board fs.
+# For 'keys.json' integrity assurance, asb_crypt needs to be frozen in firmware. It will work if included in /lib
 # but the stored hash will be exposed and readable/writable, allowing an attacker to override the integrity check.
 
 # Add modules, commit changes, create tag, make submodules, clean build directory, and build with frozen modules.
