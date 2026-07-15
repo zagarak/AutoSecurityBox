@@ -3,10 +3,10 @@
 # Written for Micropython on RP2040/Pico 2020/Arduino, by Zagarak.
 
 # This version number also corresponds to project version number.
-__version__ = "1.8.3"
+__version__ = "1.9.0"
 
 import sys
-import asb_auth # Depends on v0.0.7
+import asb_auth # Depends on v0.0.8
 from time import sleep
 from asb_fman import suspend_exec
 
