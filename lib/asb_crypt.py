@@ -2,7 +2,7 @@
 ## SHA256 Hashing and Key Integrity Management Module for AutoSecurityBox.
 # Written for Micropython.
 
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 
 import machine
 import hashlib
@@ -43,6 +43,9 @@ def rtn_f_hsh(path, chunk_size=512):
 def rtn_hw_hsh():
     kh = "HASH3"
     return kh
+
+dKey = [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF] # Mifare default key.
+cKey = [0x68, 0x65, 0x78, 0x6B, 0x65, 0x79] # Define your secret key.
 # ----------------------------------------------------------------
 
 ## Firmware level key integrity check
