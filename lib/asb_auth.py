@@ -2,11 +2,11 @@
 ## Authentication and Security Functions Module for AutoSecurityBox.
 # Written for Micropython.
 
-__version__ = "0.0.7"
+__version__ = "0.0.8"
 
 import machine
 import asb_fman # Depends on v2.0.7
-import asb_crypt # Depends on v0.0.5
+import asb_crypt # Depends on v0.0.6
 from time import sleep
 from mfrc522 import MFRC522 # Wendlers Micropython MFRC522 library.
 
@@ -75,12 +75,13 @@ def unlock_starter(sHold): # Unlock starter for the specified amount of time.
     sleep(0.1)
     secLight.value(1) # Once relocked, reactivate security light.
 
-# Initialize Reader Function.
+# Reader Polling and Block Authentication Function.
 def poll_reader(cycles):
     global card
     card = 0 # Set default card value to 0 for detecting no card state.
     tick = 0
-    for i in range(cycles):
+    block = 4 # Data block four in sector one.
+    for i in range cycles:
         reader.init()
         print("[AUTH] Reader initialised succesfully.")
         print("")
@@ -89,23 +90,59 @@ def poll_reader(cycles):
         tick += 1
         if stat == reader.OK:
             print("[AUTH] Card detected! Attempting read, please wait...")
-            (stat, uid) = reader.SelectTagSN()
+            (stat, uid) = reader.anticoll()
             if stat == reader.OK:
+                reader.SelectTag(uid)
                 cuid = int.from_bytes(bytes(uid), "little", False)
                 card = asb_crypt.cnv_uid(str(cuid))
                 print("[AUTH] Card read successfully.")
                 print("")
-                print("[AUTH] =======================")
+                print("[AUTH] ========================")
                 print("[AUTH]   SCAN RESULTS")
-                print("[AUTH] -----------------------")
+                print("[AUTH] ------------------------")
                 print("[AUTH]   CARD UID: " + str(card))
-                print("[AUTH] =======================")
+                print("[AUTH] ========================")
                 print("")
-                break
-            else: # Card unreadable or absent while resolving uid.
+                # Initiate Crypto1 authentication handshake.
+                status = reader.auth(reader.AUTHENT1A, block, asb_crypt.ckey, uid)
+                if status == reader.OK:
+                    print("Card authenticated!")
+                    reader.stop_crypto1()
+                    break # Break and return to start_auth_proto as normal.
+                else:
+                    print("[WARN] Authentication failed!")
+            else:
                 print("[WARN] Read Error! | Presented card is unreadable or was removed before read completed.")
-        else: # No card detected or no reader state change. ptick goes here.
+        else:
             print("[WARN] No card detected during this cycle. | Cycle: (" + str(tick) + "/" + str(cycleLimit) + ")")
+
+# Update Card Secret Key Function.
+# This function must be called manually in REPL each time you update a card key.
+def upd_keys(cycles):
+    trailer = 7
+    for i in range cycles:
+        reader.init()
+        contents = reader.read(trailer)
+        aBits = contents[6:10] # Preserve sector 1 access bits.
+        print("Reader initialized successfully.")
+        (stat, tag_type) = reader.request(reader.REQIDL)
+        if stat == reader.OK:
+            (stat, uid) = reader.anticoll()
+            if stat == reader.OK:
+                reader.SelectTag(uid)
+                status = reader.auth(reader.AUTHENT1A, trailer, asb_crypt.dKey, uid)
+                if status == reader.OK:
+                    # Construct a new sector trailer.
+                    nContents = asb_crypt.cKey + aBits + asb_crypt.cKey
+                    if reader.write(trailer, nContents) == reader.OK:
+                        print("[AUTH] Card was successfully encrypted with new key!")
+                        break
+                    else:
+                        # NTS: Verify that loop repeats from this nest.
+                        print("[WARN] Operation failed! Trying again...")
+                else:
+                    print("[WARN] Unable to authenticate card with the deafult key!")
+                    break
 
 # Handle Authorization Function.
 def start_auth_proto():
