@@ -1,13 +1,13 @@
 # AutoSecurityBox - Open Source Vehicle Security In A Box
 
 ## Table of Contents
-1.) [About](github.com/zagarak/AutoSecurityBox/tree/main#about)<br />
-2.) [Precautions, Safety, & Disclaimers](github.com/zagarak/AutoSecurityBox/tree/main#precautions-safety--disclaimers)<br />
-3.) [Setup](github.com/zagarak/AutoSecurityBox/tree/main#setup)<br />
-4.) [Dependencies](github.com/zagarak/AutoSecurityBox/tree/main#dependencies)<br />
-5.) [Features & Operating Objective](github.com/zagarak/AutoSecurityBox/tree/main#features--operating-objective)<br />
-6.) [About Releases](github.com/zagarak/AutoSecurityBox/tree/feature/Crypto1#about-releases)<br />
-7.) [Additional Notes](github.com/zagarak/AutoSecurityBox/tree/main#additional-notes)
+1.) [About](#about)<br />
+2.) [Precautions, Safety, & Disclaimers](#precautions-safety--disclaimers)<br />
+3.) [Setup](#setup)<br />
+4.) [Dependencies](#dependencies)<br />
+5.) [Features & Operating Objective](#features--operating-objective)<br />
+6.) [About Releases](#about-releases)<br />
+7.) [Additional Notes](#additional-notes)
 
 ## About
 > AutoSecurityBox is a project that aims to enhance the security of classic and antique vehicles that lack transponder keys or keyless ignitions by switching the starter solenoid coil wire with a logic-level relay immediately after the ignition switch inside the steering column. The controller emulates the function of a transponder key by preventing cranking of the vehicle until a valid nfc tag (or your choice of input) is detected.
