@@ -124,7 +124,7 @@ def upd_keys(cycles):
         reader.init()
         contents = reader.read(trailer)
         aBits = contents[6:10] # Preserve sector 1 access bits.
-        print("Reader initialized successfully.")
+        print("[AUTH] Reader initialised successfully.")
         (stat, tag_type) = reader.request(reader.REQIDL)
         if stat == reader.OK:
             (stat, uid) = reader.anticoll()
