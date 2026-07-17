@@ -111,6 +111,12 @@ def poll_reader(cycles):
                     break # Break and return to start_auth_proto as normal.
                 else:
                     print("[WARN] Authentication failed!")
+                    ### Check robusticity of this nest.
+                    # If authentication fails and tick is greater than three, break and return to start_auth_proto
+                    if tick > 3:
+                        # Force card value to 0.
+                        card = 0
+                        break
             else:
                 print("[WARN] Read Error! | Presented card is unreadable or was removed before read completed.")
         else:
