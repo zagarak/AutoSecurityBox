@@ -112,10 +112,9 @@ def poll_reader(cycles):
                 else:
                     print("[WARN] Authentication failed!")
                     ### Check robusticity of this nest.
-                    # If authentication fails and tick is greater than three, break and return to start_auth_proto
+                    # If authentication fails and tick is greater than three, set card to 401, break.
                     if tick > 3:
-                        # Force card value to 0.
-                        card = 0
+                        card = 401
                         break
             else:
                 print("[WARN] Read Error! | Presented card is unreadable or was removed before read completed.")
@@ -144,7 +143,7 @@ def upd_keys(cycles):
                         print("[AUTH] Card was successfully encrypted with new key!")
                         break
                     else:
-                        # NTS: Verify that loop repeats from this nest.
+                        ### NTS: Verify that loop repeats from this nest.
                         print("[WARN] Operation failed! Trying again...")
                 else:
                     print("[WARN] Unable to authenticate card with the deafult key!")
@@ -187,6 +186,9 @@ def start_auth_proto():
         elif card == 0: # If no card was scanned, exit on timeout.
             print("[WARN] Reader timed out.")
             errLvl = 22
+        elif card == 401: # Card key authentication failure.
+            print("[AUTH] Authentication Failed! Invalid key. | System will not panic in standby.")
+            errlvl = 22 # Exit on reader timeout.
         else: # If card is anything other than 0 or registered card, warn card is unregistered.
             print("[AUTH] Invalid Card! | Presented card is unregistered.")
     elif mode == "auth": # Auth-mode.
@@ -223,6 +225,10 @@ def start_auth_proto():
         elif card == 0:
             print("[ASB] Reader timed out.")
             errLvl = 22
+        elif card == 401: # Card key authentication failure.
+            print("[AUTH] Authentication Failed! Invalid key. | System will panic!")
+            asb_fman.amend_json_obj("config.json", "m0", "panic")
+            errLvl = 44
         else:
             print("[AUTH] Invalid Card! | Presented card is unregistered.")
             print("[AUTH] System will PANIC!")
