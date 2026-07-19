@@ -48,7 +48,7 @@ def check_config():
         rSleep = asb_fman.load_json_obj("config.json", "reader_sleep")
         rTimeout = asb_fman.load_json_obj("config.json", "reader_timeout")
     if asb_fman.read_file("keys.json", True) == False:
-        print("[MEM] Generating default keys...")
+        print("[MEM] Generating default key file...")
         asb_fman.gen_keys("keys.json", "k0", "k1", "k2")
         sleep(1)
         asb_fman.reboot(False)
