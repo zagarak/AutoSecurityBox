@@ -2,7 +2,7 @@
 ## AutoSecurityBox Initialization and Termination Module.
 # Written for Micropython on RP2040/Pico 2020/Arduino, by Zagarak.
 
-# This version number also corresponds to project version number.
+# Version number represents this scripts version and the project version.
 __version__ = "1.9.0"
 
 import sys
@@ -52,7 +52,7 @@ if __name__ == "asb":
         sys.exit()
         
 if __name__ == "__main__":
-    print("[ASB] asb.py should be frozen in firmware and imported by main.py!")
+    print("[WARN] asb.py should be imported by main.py!")
     sleep(3)
     sys.exit()
 # EOF
