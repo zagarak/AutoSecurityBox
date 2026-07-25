@@ -66,7 +66,7 @@ if __name__ == "asb_crypt":
             machine.reset()
 
 if __name__ == "__main__":
-    print("[ASB] asb_crypt.py should be frozen in firmware and imported by asb_auth.py!")
+    print("[WARN] asb_crypt.py should be imported by asb_auth.py!")
     sleep(3)
     machine.reset()
 # EOF
