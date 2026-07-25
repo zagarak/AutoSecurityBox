@@ -9,7 +9,7 @@ Security measures should be designed to make unauthorized access slow, noisy, an
 - Delay: Use layered physical barriers (secure placement, tamper-resistant mounting, hardening weak points) so cutting/prying takes longer.
 - Detect: Ensure attempts trigger consequences quickly (keyfile integrity verification, cryptographic handshakes).
 - Disrupt: Pair detection with escalation (system panic, lockout/wipeout, procedures that make it hard to “keep working” unnoticed).
-- Disincentivize: Secure the access path (location, enclosures, tamper-resistance) so the bottleneck isn’t only the operating objective.
+- Disincentivize: Secure the access path (location, enclosures, software tamper-resistance) so the bottleneck isn’t solely physical barriers.
 
 ## Supported Versions
 
