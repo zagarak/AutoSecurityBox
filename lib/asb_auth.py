@@ -241,7 +241,7 @@ def start_auth_proto():
         errLvl = 44
 
 if __name__ == "__main__":
-    print("[ASB] asb_auth.py should be frozen in firmware and imported by asb.py!")
+    print("[WARN] asb_auth.py should be imported by asb.py!")
     sleep(3)
     machine.reset()
 # EOF
