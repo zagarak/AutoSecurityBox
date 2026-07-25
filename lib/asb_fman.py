@@ -192,5 +192,5 @@ def reboot(dfu):
         print("[WARN] Invalid argument for reboot().")
 
 if __name__ == "__main__":
-    print("[ASB] asb_fman.py should be frozen in firmware and imported by asb_auth.py!")
+    print("[WARN] asb_fman.py should be imported by asb_auth.py!")
 ## EOF
