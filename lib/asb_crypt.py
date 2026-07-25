@@ -38,12 +38,14 @@ def rtn_f_hsh(path, chunk_size=512):
     else:
         return ''.join('{:02x}'.format(b) for b in h.digest())
 
-## Internal keys.json SHA256 hash (lowercase hex).
+## Internal Secrets
 # ----------------------------------------------------------------
+# keys.json SHA256 hash (lowercase hex).
 def rtn_hw_hsh():
     kh = "HASH3"
     return kh
 
+# Mifare Classic 1K default and custom keys (hexadecimal).
 dKey = [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF] # Mifare default key.
 cKey = [0x68, 0x65, 0x78, 0x6B, 0x65, 0x79] # Define your secret key.
 # ----------------------------------------------------------------
