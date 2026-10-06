@@ -1,5 +1,13 @@
-# AutoSecurityBox
-Open source vehicle security in a box!
+# AutoSecurityBox - Open Source Vehicle Security In A Box
+
+## Table of Contents
+1.) [About](#about)<br />
+2.) [Precautions, Safety, & Disclaimers](#precautions-safety--disclaimers)<br />
+3.) [Setup](#setup)<br />
+4.) [Dependencies](#dependencies)<br />
+5.) [Features & Operating Objective](#features--operating-objective)<br />
+6.) [About Releases](#about-releases)<br />
+7.) [Additional Notes](#additional-notes)
 
 ## About
 > AutoSecurityBox is a project that aims to enhance the security of classic and antique vehicles that lack transponder keys or keyless ignitions by switching the starter solenoid coil wire with a logic-level relay immediately after the ignition switch inside the steering column. The controller emulates the function of a transponder key by preventing cranking of the vehicle until a valid nfc tag (or your choice of input) is detected.
@@ -45,6 +53,13 @@ The goal of this project is to provide security for parked vehicles that lack na
 
 > For added security: If three read attempts are made with an invalid card, it overwrites the data key ``m0`` with the string ``"panic"`` and then resets the board. This puts the program into a tertiary mode that will refuse to initialize the reader or actuate the starter relay; Instead exiting on "system-panic" until ``m0`` is updated to either ``"auth"`` or ``"standby"``.
 
+## About Releases
+> AutoSecurityBox requires some setup before it will run properly. You must allow it to generate the files it expects and then configure them to match your needs (card uid hashes, config, mifare keys, etc.). Because of this releases are not ready-to-go packages per se, but represent tested, stable snapshots of the project.
+
+> Do not write ``keys.json`` or ``config.json`` to the microcontroller's filesystem directly; Instead, allow ASB to generate its own object files to ensure they comply exactly with what the software expects. After generation you may modify their contents to conform to your needs.
+
+> If you are freezing ``asb_crypt.py`` and/or other modules in firmware, modify ``asb_crypt.rtn_hw_hsh()`` and ``asb_crypt.cKey`` to their corresponding values before compiling Micropython.
+
 ## Additional Notes
 **I've implemented SHA256 hashing of scanned card UIDs, stored UIDs, and the key file itsself. You will have to manually hash your UIDs before inputting them into keys.json. Then hash keys.json and input it into ``asb_crypt.py`` before freezing modules and compiling firmware.**
 
@@ -52,4 +67,4 @@ The goal of this project is to provide security for parked vehicles that lack na
 
 > Mode values are arbitrary and may be changed by the end user so long as each corresponding reference in ``asb.py`` is also changed to match its partner. They exist solely to act as a magic number so that the Microcontroller can track state changes between power cycles without a backup battery.
 
-> You may notice a diode on ``5v+_Vsys`` in ``schema.png``. I added it between the supply and the microcontroller to isolate the converter output from the debug cable's ``5v+`` to prevent backfeeding of the buck converter during programming.
+> You may notice a diode on ``5v+_Vsys`` in ``schema.png``. I added it between the supply and the microcontroller to isolate the converter output from the debug cable's ``5v+`` to prevent back-feeding of the buck converter during programming.
